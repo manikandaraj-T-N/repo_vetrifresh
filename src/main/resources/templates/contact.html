@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us – VetriFresh</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" th:href="@{/css/contact.css}"/>
+    <link rel="stylesheet" th:href="@{/css/newsletter.css}"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  
+</head>
+<body>
+
+    <header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+   <div class="header-search">
+  <form th:action="@{/search}" method="get" style="display:flex;align-items:center;width:100%">
+    <span class="search-icon">🔍</span>
+    <input type="text" name="q"
+           placeholder="Search fresh vegetables, fruits…"
+           th:value="${param.q}"/>
+    <button type="submit" style="background:green;border:none;cursor:pointer; padding: 10px 15px; border-radius: 10px; color:white">&#10230;</button>
+  </form>
+</div>
+    <nav>
+      <ul>
+        <li><a th:href="@{/home}" >Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a th:href="@{/about}">About Us</a></li>
+        <li><a th:href="@{/contact}" class="nav-active">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+   
+      <!-- wishlist -->
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i>
+    <span class="cart-badge" id="wishlistCount" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+      
+      <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+  <button class="icon-btn" title="Cart">
+    🛒
+    <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+  </button>
+</a>
+
+
+      <!-- Show login/logout based on authentication -->
+     <div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name">User</span>
+    <a th:href="@{/logout}">
+        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">
+        <button class="icon-btn" title="Account">👤</button>
+    </a>
+</div>
+    </div>
+  </div>
+    </header>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a th:href="@{/home}"><i class="fas fa-home"></i></a>
+  <span class="sep">›</span>
+  <span>Contact</span>
+</div>
+
+<!-- Contact Content -->
+<div class="contact-wrapper">
+
+  <!-- Success message (shown after form submit) -->
+  <div class="success-msg"
+       th:if="${successMessage}"
+       th:text="${successMessage}">
+    Your message has been sent successfully!
+  </div>
+
+  <div class="contact-grid">
+
+    <!-- ── Left: Info Card ── -->
+    <div class="info-card">
+
+      <div class="info-item">
+        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <p>Surandai, Tenkasi<br/>Tamil Nadu, India</p>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+        <p>vetrifresh@gmail.com<br/>help.vetrifresh@gmail.com</p>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+        <p>+91 93738 01410<br/>+91 76709 28721</p>
+      </div>
+
+    </div>
+
+    <!-- ── Right: Form Card ── -->
+    <div class="form-card">
+      <h2>Get in Touch</h2>
+
+      <form th:action="@{/contact/submit}" method="post">
+        
+
+        <div class="form-row">
+          <input type="text"   name="name"  placeholder="Name"  required/>
+          <input type="email"  name="email" placeholder="Email" required/>
+        </div>
+
+        <div class="form-full">
+          <input type="tel" name="phone" placeholder="Phone Number"/>
+        </div>
+
+        <div class="form-full">
+          <textarea name="message" placeholder="Message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ── Map ── -->
+  <div class="map-section">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.1!2d77.4!3d8.98!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSurandai%2C+Tenkasi!5e0!3m2!1sen!2sin!4v1"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="VetriFresh Location">
+    </iframe>
+  </div>
+
+</div>
+
+
+<!-- ===============================NEWSLETTER===================================================== -->
+ 
+  <section class="newsletter">
+    <div class="newsletter-box">
+      <div>
+        <div class="section-tag">Stay Fresh</div>
+        <h2 class="newsletter-title"
+            th:text="${newsletterTitle} ?: 'Get the Freshest Deals, Straight to Your Inbox'">
+          Get the Freshest Deals, Straight to Your Inbox
+        </h2>
+        <p class="newsletter-sub"
+           th:text="${newsletterSub} ?: 'Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.'">
+          Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.
+        </p>
+      </div>
+      <div>
+        <!-- POST to /newsletter/subscribe -->
+        <form th:action="@{/newsletter/subscribe}" method="post" class="newsletter-form">
+          <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="email" name="email" placeholder="Enter your email address…" required/>
+          <button type="submit" class="btn-primary" style="padding:14px 24px;border-radius:50px">Subscribe</button>
+        </form>
+        <!-- Success / Error messages -->
+        <p th:if="${newsletterSuccess}" style="color:#7fff8a;font-size:13px;margin-top:8px"
+           th:text="${newsletterSuccess}">Subscribed!</p>
+        <p th:if="${newsletterError}" style="color:#ff6b6b;font-size:13px;margin-top:8px"
+           th:text="${newsletterError}">Error.</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:10px">🔒 No spam, ever. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+<!-- ==================footer==================================== -->
+
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+</body>
+</html>

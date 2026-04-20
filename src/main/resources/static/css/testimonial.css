@@ -1,0 +1,100 @@
+.testimonial-section {
+  padding: 50px;
+  background: #f8f8f8;
+}
+
+.testimonial-section h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.testimonial-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #ddd;
+  position: relative;
+  min-height: 230px;
+}
+
+.quote {
+  font-size: 40px;
+  color: #4caf50;
+}
+
+.testimonial-card p {
+  color: #555;
+  margin: 10px 0 20px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user img {
+  border-radius: 50% !important;
+  width: 50px !important;
+  height: 50px !important;
+}
+
+
+
+.user h4 {
+  margin: 0;
+}
+
+.user span {
+  font-size: 12px;
+  color: gray;
+}
+
+.stars {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  color: #ff7a00;
+  font-size: 16px;
+}
+
+/* Navigation buttons like your design */
+.owl-nav {
+  position: absolute;
+  top: -60px;
+  right: 0;
+}
+
+.owl-nav button {
+  width: 45px;
+  height: 45px;
+  border-radius: 50% !important;
+  border: none;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+/* Left arrow */
+.owl-nav .owl-prev {
+  background: #eee !important;
+}
+
+/* Right arrow (green active) */
+.owl-nav .owl-next {
+  background: #16a34a !important;
+  color: #fff !important;
+}
+
+/* Hover effect */
+.owl-nav button:hover {
+  transform: scale(1.05);
+}
+
+/* Dots styling */
+.owl-theme .owl-dots .owl-dot span {
+  background: #ccc;
+}
+
+.owl-theme .owl-dots .owl-dot.active span {
+  background: #4caf50;
+}

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"     
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${pageTitle} ?: 'VetriFresh — Pure · Organic · Fresh'">VetriFresh — Pure · Organic · Fresh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+   <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+
+   <link rel="stylesheet" th:href="@{/css/popular.css}"/>
+    <link rel="stylesheet" th:href="@{/css/latestnews.css}"/>
+   <link rel="stylesheet" th:href="@{/css/followinsta.css}"/>
+   <link rel="stylesheet" th:href="@{/css/testimonial.css}"/>
+   <link rel="stylesheet" th:href="@{/css/newsletter.css}"/>
+   <!-- <link rel="stylesheet" th:href="@{/css/newsletter.css}"/> -->
+   <link rel="stylesheet" th:href="@{/css/cartdrawer.css}"/>
+   
+
+   <!-- Owl Carousel CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+
+<!-- jQuery (required) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Owl Carousel JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  🌿 <span th:text="${topbarMessage} ?: 'Free delivery on orders above ₹500'">Free delivery on orders above ₹500</span>
+  &nbsp;|&nbsp;
+  <span th:text="${saleMessage} ?: 'Summer Sale: Up to 30% OFF'">Summer Sale: Up to 30% OFF</span>
+  &nbsp;|&nbsp;
+  📞 <span th:text="${contactPhone} ?: '+91 93738 01410'">+91 93738 01410</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+   <div class="header-search">
+  <form th:action="@{/search}" method="get" style="display:flex;align-items:center;width:100%">
+    <span class="search-icon">🔍</span>
+    <input type="text" name="q"
+           placeholder="Search fresh vegetables, fruits…"
+           th:value="${param.q}"/>
+    <button type="submit" style="background:green;border:none;cursor:pointer; padding: 10px 15px; border-radius: 10px; color:white">&#10230;</button>
+  </form>
+</div>
+    <nav>
+      <ul>
+        <li><a th:href="@{/home}" class="nav-active">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a th:href="@{/about}">About Us</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+   
+      <!-- wishlist -->
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i>
+    <span class="cart-badge" id="wishlistCount" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+      
+      <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+  <button class="icon-btn" title="Cart">
+    🛒
+    <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+  </button>
+</a>
+
+
+      <!-- Show login/logout based on authentication -->
+     <div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name">User</span>
+    <a th:href="@{/logout}">
+        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">
+        <button class="icon-btn" title="Account">👤</button>
+    </a>
+</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main id="mainContent">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-main fade-in-up">
+      <div class="hero-badge"><span class="dot"></span>
+        <span th:text="${heroBadge} ?: '100% Certified Organic'">100% Certified Organic</span>
+      </div>
+      <h1 class="hero-title" th:utext="${heroTitle} ?: 'Fresh &amp; <em>Healthy</em><br/>Organic Food'">
+        Fresh &amp; <em>Healthy</em><br/>Organic Food
+      </h1>
+      <p class="hero-sub" th:text="${heroSubtitle} ?: 'Farm-to-table goodness delivered to your doorstep. Pure, natural, and always fresh.'">
+        Farm-to-table goodness delivered to your doorstep. Pure, natural, and always fresh.
+      </p>
+      <div class="hero-offer">
+        <span class="offer-badge" th:text="${heroOfferBadge} ?: '30% OFF'">30% OFF</span>
+        <span class="offer-text" th:utext="${heroOfferText} ?: 'Sale up to 30% OFF<br/>Free shipping on all orders'">
+          Sale up to 30% OFF<br/>Free shipping on all orders
+        </span>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-orange" onclick="scrollToProducts()">Shop Now →</button>
+        <button class="btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.5)" onclick="showAllOrganic()">Our Story</button>
+      </div>
+      <div class="hero-img-placeholder">🌽</div>
+    </div>
+    <div class="hero-sidebar">
+      <div class="hero-card card-sale fade-in-up delay-1">
+        <div>
+          <div class="hero-card-tag" th:text="${saleCardTag} ?: 'Summer Sale'">Summer Sale</div>
+          <div class="hero-card-title" th:text="${saleCardDiscount} ?: '75% OFF'">75% OFF</div>
+          <div class="hero-card-sub" th:text="${saleCardSub} ?: 'Only Fruit &amp; Vegetable'">Only Fruit &amp; Vegetable</div>
+          <button class="btn-outline" onclick="filterCategory('fruits')" style="font-size:13px;padding:8px 18px">Shop Now →</button>
+        </div>
+        <div class="hero-card-img"><img th:src="@{/images/bag.jpg}" alt=""></div>
+      </div>
+      <div class="hero-card card-deal fade-in-up delay-2">
+        <div class="overlay-color">
+        <div >
+          <div class="hero-card-tag" th:text="${dealCardTag} ?: 'Best Deal'">Best Deal</div>
+          <div class="hero-card-title" th:text="${dealCardTitle} ?: 'Special Products Deal of the Month'">Special Products Deal of the Month</div>
+          <div class="hero-card-sub" th:text="${dealCardSub} ?: 'Limited time offers'">Limited time offers</div>
+          <button class="btn-primary" onclick="showSaleProducts()" style="margin-top:12px;font-size:13px">View Deals →</button>
+        </div>
+        <!-- <div class="hero-card-img">🌿</div> -->
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+ <div class="features-row">
+  <th:block th:if="${features != null and !features.isEmpty()}">
+    <div class="feature-item" th:each="feature : ${features}">
+      <div class="feature-icon"><i th:class="${feature.icon}"></i></div>
+      <div class="feature-title" th:text="${feature.title}">Feature</div>
+      <div class="feature-desc" th:text="${feature.description}">Description</div>
+    </div>
+  </th:block>
+
+  <th:block th:unless="${features != null and !features.isEmpty()}">
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-truck"></i></div>
+      <div class="feature-title">Free Delivery</div>
+      <div class="feature-desc">On orders above ₹500</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-leaf"></i></div>
+      <div class="feature-title">100% Organic</div>
+      <div class="feature-desc">Certified chemical-free produce</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+      <div class="feature-title">Same Day Delivery</div>
+      <div class="feature-desc">Order before 12 PM</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon"><i class="fas fa-rotate-left"></i></div>
+      <div class="feature-title">Easy Returns</div>
+      <div class="feature-desc">Hassle-free 24hr return policy</div>
+    </div>
+  </th:block>
+</div>
+
+  <!-- =============================CATEGORIES =====================-->
+<section class="section" id="categoriesSection">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Browse by Category</div>
+      <h2 class="section-title">What Are You Looking For?</h2>
+    </div>
+    <a th:href="@{/shop}" class="see-all">View All →</a>
+  </div>
+
+  <div class="categories-grid" id="categoriesGrid">
+
+    <!-- Always show static fallback cards -->
+    <a class="category-card" href="/shop?category=fresh-fruit">
+      <div class="cat-img-wrapper">
+        <img src="/images/bag.jpg" alt="Fresh Fruit" class="cat-img"/>
+      </div>
+      <div class="cat-name">Fresh Fruit</div>
+    </a>
+    <a class="category-card" href="/shop?category=fresh-vegetables">
+      <div class="cat-img-wrapper">
+        <img src="/images/vegetables.jpg" alt="Fresh Vegetables" class="cat-img"/>
+      </div>
+      <div class="cat-name">Fresh Vegetables</div>
+    </a>
+    <a class="category-card" href="/shop?category=meat-fish">
+      <div class="cat-img-wrapper">
+        <img src="/images/meat.jpg" alt="Meat & Fish" class="cat-img"/>
+      </div>
+      <div class="cat-name">Meat &amp; Fish</div>
+    </a>
+    <a class="category-card" href="/shop?category=snacks">
+      <div class="cat-img-wrapper">
+        <img src="/images/snacks.jpg" alt="Snacks" class="cat-img"/>
+      </div>
+      <div class="cat-name">Snacks</div>
+    </a>
+    <a class="category-card" href="/shop?category=beverages">
+      <div class="cat-img-wrapper">
+        <img src="/images/beverages.jpg" alt="Beverages" class="cat-img"/>
+      </div>
+      <div class="cat-name">Beverages</div>
+    </a>
+    <a class="category-card" href="/shop?category=beauty-health">
+      <div class="cat-img-wrapper">
+        <img src="/images/beauty.jpg" alt="Beauty &amp; Health" class="cat-img"/>
+      </div>
+      <div class="cat-name">Beauty &amp; Health</div>
+    </a>
+    <a class="category-card" href="/shop?category=bread-bakery">
+      <div class="cat-img-wrapper">
+        <img src="/images/bread.jpg" alt="Bread & Bakery" class="cat-img"/>
+      </div>
+      <div class="cat-name">Bread &amp; Bakery</div>
+    </a>
+    <a class="category-card" href="/shop?category=baking-needs">
+      <div class="cat-img-wrapper">
+        <img src="/images/baking.jpg" alt="Baking Needs" class="cat-img"/>
+      </div>
+      <div class="cat-name">Baking Needs</div>
+    </a>
+    <a class="category-card" href="/shop?category=cooking">
+      <div class="cat-img-wrapper">
+        <img src="/images/cooking.jpg" alt="Cooking" class="cat-img"/>
+      </div>
+      <div class="cat-name">Cooking</div>
+    </a>
+    <a class="category-card" href="/shop?category=diabetic-food">
+      <div class="cat-img-wrapper">
+        <img src="/images/Diabetic.jpg" alt="Diabetic Food" class="cat-img"/>
+      </div>
+      <div class="cat-name">Diabetic Food</div>
+    </a>
+    <a class="category-card" href="/shop?category=dish-detergents">
+      <div class="cat-img-wrapper">
+        <img src="/images/dish.jpg" alt="Dish Detergents" class="cat-img"/>
+      </div>
+      <div class="cat-name">Dish Detergents</div>
+    </a>
+    <a class="category-card" href="/shop?category=oil">
+      <div class="cat-img-wrapper">
+        <img src="/images/oil.jpg" alt="Oil" class="cat-img"/>
+      </div>
+      <div class="cat-name">Oil</div>
+    </a>
+
+    <!-- ALSO show DB categories from admin (appended after static) -->
+    <th:block th:if="${categories != null and !categories.isEmpty()}">
+      <a class="category-card"
+         th:each="category : ${categories}"
+         th:href="@{/shop(category=${category.slug})}">
+        <div class="cat-img-wrapper">
+          <img alt="product image" th:src="${category.imageUrl}"
+               th:alt="${category.name}"
+               class="cat-img"/>
+        </div>
+        <div class="cat-name" th:text="${category.name}">Category</div>
+      </a>
+    </th:block>
+
+  </div>
+</section>
+  <!-- ===============================FEATURED PRODUCTS=============================== -->
+  <!-- <section class="section" id="productsSection">
+    <div class="section-header">
+      <div>
+        <div class="section-tag" id="productsTag"
+             th:text="${productsTag} ?: 'Featured Products'">Featured Products</div>
+        <h2 class="section-title" id="productsTitle"
+            th:text="${productsTitle} ?: 'Fresh Picks of the Week'">Fresh Picks of the Week</h2>
+      </div>
+      <a th:href="@{/shop}" class="see-all">View All →</a>
+    </div>
+ 
+    <div class="products-grid" id="productsGrid"
+         th:if="${products != null and !products.isEmpty()}">
+      <div class="product-card" th:each="product : ${products}">
+        <div class="product-img-wrap">
+          <img th:if="${product.imageUrl != null}"
+               th:src="@{${product.imageUrl}}"
+               th:alt="${product.name}"
+                class="product-img"/>
+   
+<span th:unless="${product.imageUrl != null}"
+      class="product-emoji"></span>
+
+
+          <span class="product-badge" th:if="${product.discountPercentage != null}"
+      th:text="${product.discountPercentage + '% OFF'}">Sale</span>
+        </div>
+
+        <div class="product-info">
+          <div class="product-category" th:text="${product.category != null} ? ${product.category.name} : ''">Vegetables</div>
+          <div class="product-name" th:text="${product.name}">Product Name</div>
+          <div class="product-weight" th:text="${product.unit}">500g</div>
+          <div class="product-price-row">
+            <span class="product-price" th:text="'₹' + ${product.price}">₹0</span>
+            <span class="product-original"
+                  th:if="${product.originalPrice != null}"
+                  th:text="'₹' + ${product.originalPrice}">₹0</span>
+          </div>
+          <button class="add-to-cart-btn"
+                  th:data-product-id="${product.id}"
+                  th:data-product-name="${product.name}"
+                  th:data-product-price="${product.price}"
+                  th:onclick="'addToCart(' + ${product.id} + ', \'' + ${product.name} + '\', ' + ${product.price} + ')'">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div> 
+
+    
+  </section> -->
+
+  <!--============================= SALE BANNER============== -->
+  <div class="banner-strip">
+    <div class="banner-inner">
+      <div>
+        <h2 class="banner-title" th:text="${bannerTitle} ?: 'Get 30% Off Your First Order!'">
+          Get 30% Off Your First Order!
+        </h2>
+        <p class="banner-sub">
+          Use code
+          <strong style="color:#7fff8a"
+                  th:text="${promoCode} ?: 'VETRIFRESH30'">VETRIFRESH30</strong>
+          at checkout. Fresh organic goodness awaits.
+        </p>
+      </div>
+      <button class="btn-orange" style="font-size:16px;padding:16px 36px">Claim Offer →</button>
+    </div>
+  </div>
+
+    <!-- =======================Popular Products=================== -->
+
+<div class="section popular">
+
+  <!-- Header -->
+  <div class="section-header popular">
+    <h2>Popular Products</h2>
+    <a th:href="@{/shop}" class="view-all">View All →</a>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid popular">
+
+    <div class="product-card" th:each="product : ${products}">
+
+      <!-- Sale / New badge -->
+      <div class="badge sale"
+           th:if="${product.discountPercentage != null and product.discountPercentage > 0}"
+           th:text="'Sale ' + ${product.discountPercentage} + '%'">Sale</div>
+
+      <div class="badge new"
+           th:if="${product.discountPercentage == null or product.discountPercentage == 0}">
+        New
+      </div>
+
+      <!-- Image wrapper -->
+      <div class="product-img-wrapper popular">
+        <img th:src="${product.imageUrl} ?: '/images/placeholder.jpg'"
+             th:alt="${product.name} ?: 'Product'" />
+
+        <!-- Rating badge inside image wrapper -->
+        <div class="rating-badge popular" th:if="${product.rating != null}">
+          <i class="fas fa-star"></i>
+          <span th:text="${product.rating}">4.5</span>
+        </div>
+      </div>
+      <!-- /product-img-wrapper -->
+
+      <!-- Product info -->
+      <div class="product-info popular">
+
+        <h4 th:text="${product.name} ?: 'Product'">Product Name</h4>
+
+        <div class="price">
+          <span class="current"
+                th:text="'₹' + ${product.price} + (${product.unit != null} ? '/' + ${product.unit} : '')">
+            ₹199/kg
+          </span>
+          <span class="old"
+                th:if="${product.originalPrice != null}"
+                th:text="'₹' + ${product.originalPrice}">₹320</span>
+        </div>
+        <!-- /price -->
+
+  
+        <!-- Stars + Cart -->
+<div class="product-footer">
+
+  <div class="stars">
+    <th:block th:if="${product.rating != null}">
+      <i th:each="i : ${#numbers.sequence(1,5)}"
+         th:class="${i <= product.rating.intValue()} ? 'fas fa-star' : 'far fa-star'"></i>
+    </th:block>
+    <th:block th:if="${product.rating == null}">
+      <i class="far fa-star"></i>
+      <i class="far fa-star"></i>
+      <i class="far fa-star"></i>
+      <i class="far fa-star"></i>
+      <i class="far fa-star"></i>
+    </th:block>
+  </div>
+
+  <!-- Buttons row -->
+  <div style="display:flex;gap:6px;">
+
+    <!-- Wishlist button -->
+    <form th:action="@{/wishlist/add}" method="post" style="margin:0;padding:0;display:flex;">
+      <input type="hidden" name="productId" th:value="${product.id}"/>
+      <button type="submit" class="wishlist-btn" title="Add to Wishlist">
+        <i class="fas fa-heart"></i>
+      </button>
+    </form>
+
+    <!-- Cart button -->
+    <form th:action="@{/cart/add}" method="post" style="margin:0;padding:0;display:flex;">
+      <input type="hidden" name="productId" th:value="${product.id}"/>
+      <input type="hidden" name="quantity" value="1"/>
+      <button type="submit" class="cart-btn" title="Add to Cart">
+        <i class="fas fa-shopping-bag"></i>
+      </button>
+    </form>
+
+  </div>
+
+</div>
+        <!-- /product-footer -->
+
+      </div>
+      <!-- /product-info -->
+
+    </div>
+    <!-- /product-card -->
+
+  </div>
+  <!-- /products-grid -->
+
+</div>
+<!-- /section popular -->
+
+
+<!--==================================== Latest Post News ====================-->
+<!-- 
+<div class="news-section">
+
+
+  <h2 class="news-title">Latest News</h2>
+
+
+  <div class="news-grid">
+
+    <div class="news-card" th:each="post : ${posts}">
+
+   
+      <div class="news-img-wrapper">
+        <img th:src="${post.imageUrl}" alt="news"/>
+
+   
+        <div class="date-badge">
+          <span th:text="${#dates.format(post.date, 'dd')}">18</span>
+          <small th:text="${#dates.format(post.date, 'MMM').toUpperCase()}">NOV</small>
+        </div>
+      </div>
+
+
+      <div class="news-content">
+
+   
+        <div class="news-meta">
+          <span>📌 Food</span>
+          <span>👤 By Admin</span>
+          <span>💬 65 Comments</span>
+        </div>
+
+
+        <h3 th:text="${post.title}">
+          Benefits Of orange Juice for Skin and health
+        </h3>
+
+     
+        <a th:href="@{/blog/{id}(id=${post.id})}" class="read-more">
+          Read More →
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div> -->
+
+<div class="news-section">
+
+  <!-- Title -->
+  <h2 class="news-title">Latest News</h2>
+
+  <!-- Grid -->
+  <div class="news-grid">
+
+    <!-- Card 1 -->
+    <div class="news-card">
+      <div class="news-img-wrapper">
+        <img src="images/post-1.jpg" alt="Orange Juice">
+
+        <div class="date-badge">
+          <span>18</span>
+          <small>NOV</small>
+        </div>
+      </div>
+
+      <div class="news-content">
+        <div class="news-meta">
+          <span>📌 Food</span>
+          <span>👤 By Admin</span>
+          <span>💬 65 Comments</span>
+        </div>
+
+        <h3>Benefits Of orange Juice for Skin and health</h3>
+
+        <a href="#" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="news-card">
+      <div class="news-img-wrapper">
+        <img src="images/post-2.jpg" alt="Healthy Food">
+
+        <div class="date-badge">
+          <span>29</span>
+          <small>JAN</small>
+        </div>
+      </div>
+
+      <div class="news-content">
+        <div class="news-meta">
+          <span>📌 Food</span>
+          <span>👤 By Admin</span>
+          <span>💬 65 Comments</span>
+        </div>
+
+        <h3>Protein rich food for Dieting which Builds the muscles</h3>
+
+        <a href="#" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="news-card">
+      <div class="news-img-wrapper">
+        <img src="images/post-3.jpg" alt="Veggies">
+
+        <div class="date-badge">
+          <span>21</span>
+          <small>FEB</small>
+        </div>
+      </div>
+
+      <div class="news-content">
+        <div class="news-meta">
+          <span>📌 Food</span>
+          <span>👤 By Admin</span>
+          <span>💬 65 Comments</span>
+        </div>
+
+        <h3>Rich in minerals found in the Veggies than meat</h3>
+
+        <a href="#" class="read-more">Read More →</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ====================================follw on instagram================================= -->
+ <section class="instagram-section">
+  <h2>Follow us on Instagram</h2>
+
+  <div class="insta-grid">
+
+    <div class="insta-card">
+      <img th:src="@{/images/insta1.jpg}" alt="">
+      <div class="insta-overlay">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+    </div>
+
+    <div class="insta-card overlay">
+      <img th:src="@{/images/insta2.jpg}" alt="">
+      <div class="insta-overlay">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+    </div>
+
+    <div class="insta-card">
+      <img th:src="@{/images/insta3.jpg}" alt="">
+       <div class="insta-overlay">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+    </div>
+
+    <div class="insta-card">
+      <img th:src="@{/images/insta4.jpg}" alt="">
+       <div class="insta-overlay">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+    </div>
+
+    <div class="insta-card">
+      <img th:src="@{/images/insta5.jpg}" alt="">
+       <div class="insta-overlay">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+    </div>
+
+    <div class="insta-card">
+      <img th:src="@{/images/insta6.jpg}" alt="">
+       <div class="insta-overlay">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- ===========================================testinomial================================================ -->
+<section class="testimonial-section">
+  <h2>Client Testimonials</h2>
+
+  <div class="owl-carousel testimonial-carousel">
+
+    <!-- Card 1 -->
+    <div class="testimonial-card">
+      <div class="quote">“</div>
+      <p>
+        I used to forget half my groceries every week, but now Vetri Fresh
+        just suggests everything I need. It literally saves me time and mental effort.
+      </p>
+
+      <div class="user">
+        <img th:src="@{/images/user1.jpg}" alt="Ananth">
+        <div>
+          <h4>Ananth</h4>
+          <span>Customer</span>
+        </div>
+      </div>
+
+      <div class="stars">
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="testimonial-card">
+      <div class="quote">“</div>
+      <p>
+        The freshness score feature is something I’ve never seen before.
+        I know exactly where my vegetables come from and how fresh they are.
+      </p>
+
+      <div class="user">
+         <img th:src="@{/images/user2.jpg}" alt="Krishna Kumar">
+        <div>
+          <h4>Krishna Kumar</h4>
+          <span>Customer</span>
+        </div>
+      </div>
+
+     <div class="stars">
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="testimonial-card">
+      <div class="quote">“</div>
+      <p>
+        The app feels super smooth and clean. With AI recommendations,
+        I don’t even need to search much anymore.
+      </p>
+
+      <div class="user">
+        <img th:src="@{/images/user3.jpg}" alt="Suresh">
+        <div>
+          <h4>Suresh</h4>
+          <span>Customer</span>
+        </div>
+      </div>
+
+    <div class="stars">
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===============================NEWSLETTER===================================================== -->
+ 
+  <section class="newsletter">
+    <div class="newsletter-box">
+      <div>
+        <div class="section-tag">Stay Fresh</div>
+        <h2 class="newsletter-title"
+            th:text="${newsletterTitle} ?: 'Get the Freshest Deals, Straight to Your Inbox'">
+          Get the Freshest Deals, Straight to Your Inbox
+        </h2>
+        <p class="newsletter-sub"
+           th:text="${newsletterSub} ?: 'Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.'">
+          Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.
+        </p>
+      </div>
+      <div>
+        <!-- POST to /newsletter/subscribe -->
+        <form th:action="@{/newsletter/subscribe}" method="post" class="newsletter-form">
+          <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="email" name="email" placeholder="Enter your email address…" required/>
+          <button type="submit" class="btn-primary" style="padding:14px 24px;border-radius:50px">Subscribe</button>
+        </form>
+        <!-- Success / Error messages -->
+        <p th:if="${newsletterSuccess}" style="color:#7fff8a;font-size:13px;margin-top:8px"
+           th:text="${newsletterSuccess}">Subscribed!</p>
+        <p th:if="${newsletterError}" style="color:#ff6b6b;font-size:13px;margin-top:8px"
+           th:text="${newsletterError}">Error.</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:10px">🔒 No spam, ever. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer__top">
+
+    <!-- About -->
+    <div class="footer__about">
+      <h3 class="footer__heading">About Vetri Fresh</h3>
+      <p class="footer__desc">
+        Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui,
+        eget bibendum magna congue nec.
+      </p>
+      <div class="footer__contact">
+        <span class="footer__contact-item">7836389098</span>
+        <span class="footer__contact-or">or</span>
+        <span class="footer__contact-item">vetrifresh@gmail.com</span>
+      </div>
+    </div>
+
+    <!-- My Account -->
+    <div class="footer__col">
+      <h3 class="footer__heading">My Account</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/profile}">My Account</a></li>
+        <li><a th:href="@{/orders}">Order History</a></li>
+        <li><a th:href="@{/cart}">Shopping Cart</a></li>
+        <li><a th:href="@{/wishlist}">Wishlist</a></li>
+        <li><a th:href="@{/profile}">Settings</a></li>
+      </ul>
+    </div>
+
+    <!-- Helps -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Helps</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/contact}">Contact</a></li>
+        <li><a th:href="@{/faq}">Faqs</a></li>
+        <li><a th:href="@{/terms}">Terms &amp; Condition</a></li>
+        <li><a th:href="@{/privacy}">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <!-- Proxy -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Proxy</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/about}">About</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/shop}">Product</a></li>
+        <li><a th:href="@{/shop}">Products Details</a></li>
+        <li><a th:href="@{/orders}">Track Order</a></li>
+      </ul>
+    </div>
+
+    <!-- Instagram -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Instagram</h3>
+      <div class="footer__insta-grid">
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&q=70" alt="Instagram 1" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=100&q=70" alt="Instagram 2" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=100&q=70" alt="Instagram 3" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=100&q=70" alt="Instagram 4" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1543168256-418811576931?w=100&q=70" alt="Instagram 5" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1506617564039-2f3b650b7010?w=100&q=70" alt="Instagram 6" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1490885578174-acda8905c2c6?w=100&q=70" alt="Instagram 7" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1467453678174-768ec283a940?w=100&q=70" alt="Instagram 8" /></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer__bottom">
+
+    <div class="footer__socials">
+      <a href="#" class="footer__social footer__social--fb">f</a>
+      <a href="#" class="footer__social">𝕏</a>
+      <a href="#" class="footer__social">𝐏</a>
+      <a href="#" class="footer__social">◎</a>
+    </div>
+
+    <p class="footer__copy">VetriFresh eCommerce &copy; 2021. All Rights Reserved</p>
+
+    <div class="footer__payments">
+      <span class="footer__pay footer__pay--apple">Apple Pay</span>
+      <span class="footer__pay footer__pay--visa">VISA</span>
+      <span class="footer__pay footer__pay--discover">DISCOVER</span>
+      <span class="footer__pay footer__pay--mastercard">
+        <span class="mc-left"></span>
+        <span class="mc-right"></span>
+      </span>
+      <span class="footer__pay footer__pay--secure">🔒 Secure Payment</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Your Cart 🛒</h3>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItemsList"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
+    <div class="cart-total-row">
+      <span>Delivery</span>
+      <span id="cartDelivery" th:text="'₹' + (${deliveryCharge} ?: '40')">₹40</span>
+    </div>
+    <div class="cart-grand-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="checkout-btn" onclick="window.location.href='/checkout'">Proceed to Checkout →</button>
+  </div>
+</div>
+
+
+<!-- Success Toast -->
+<div id="successToast" class="toast"
+     th:classappend="${successMessage != null} ? ' show' : ''">
+  <span>✅</span>
+  <span th:text="${successMessage} ?: ''"></span>
+</div>
+
+<!-- Error Toast -->
+<div id="errorToast" class="toast toast-error"
+     th:classappend="${errorMessage != null} ? ' show' : ''">
+  <span>❌</span>
+  <span th:text="${errorMessage} ?: ''"></span>
+</div>
+
+
+<th:block>
+
+  <script>
+  $(document).ready(function(){
+    $(".testimonial-carousel").owlCarousel({
+      loop: true,
+      margin: 20,
+      nav: true,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 3000,
+
+      navText: [
+        "<span class='arrow-left'>&larr;</span>",
+        "<span class='arrow-right'>&rarr;</span>"
+      ],
+
+      responsive:{
+        0:{ items:1 },
+        768:{ items:2 },
+        1000:{ items:3 }
+      }
+    });
+  });
+
+
+</script>
+
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    ['successToast', 'errorToast'].forEach(function(id) {
+      const toast = document.getElementById(id);
+      if (toast && toast.classList.contains('show')) {
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      }
+    });
+  });
+</script>
+
+</th:block>
+
+</body>
+</html>

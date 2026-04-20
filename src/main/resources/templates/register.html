@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Vetrifresh</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}"/>
+</head>
+<body>
+
+<div class="register-container">
+
+    <div class="brand">
+        <span class="brand-icon">🌿</span>
+        <h2>Create Account</h2>
+        <p class="brand-sub">Join VetriFresh — Pure · Organic · Fresh</p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error">
+        <span>⚠️</span> <span th:text="${error}"></span>
+    </div>
+
+    <form th:action="@{/register}" th:object="${registerRequest}"
+          method="post" id="registerForm" novalidate>
+
+        <!-- Name -->
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <div class="input-wrap">
+                <span class="input-icon">👤</span>
+                <input type="text" id="name" th:field="*{name}"
+                       placeholder="Enter your full name" autocomplete="name"/>
+            </div>
+            <span class="field-error" id="nameError"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-wrap">
+                <span class="input-icon">📧</span>
+                <input type="email" id="email" th:field="*{email}"
+                       placeholder="Enter your email" autocomplete="email"/>
+            </div>
+            <span class="field-error" id="emailError"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="password" th:field="*{password}"
+                       placeholder="Create a strong password" autocomplete="new-password"/>
+                <button type="button" class="toggle-pw" onclick="togglePassword('password','togglePwBtn')" id="togglePwBtn">👁️</button>
+            </div>
+            <span class="field-error" id="passwordError"></span>
+
+            <!-- Strength bar -->
+            <div class="strength-bar-wrap" id="strengthWrap" style="display:none">
+                <div class="strength-bar">
+                    <div class="strength-fill" id="strengthFill"></div>
+                </div>
+                <span class="strength-label" id="strengthLabel">Weak</span>
+            </div>
+
+            <!-- Rules checklist -->
+            <ul class="pwd-rules" id="pwdRules">
+                <li id="rule-len">   <span class="rule-icon">○</span> At least 8 characters</li>
+                <li id="rule-upper"> <span class="rule-icon">○</span> One uppercase letter (A–Z)</li>
+                <li id="rule-lower"> <span class="rule-icon">○</span> One lowercase letter (a–z)</li>
+                <li id="rule-num">   <span class="rule-icon">○</span> One number (0–9)</li>
+                <li id="rule-special"><span class="rule-icon">○</span> One special character (!@#$…)</li>
+            </ul>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="input-wrap">
+                <span class="input-icon">🔑</span>
+                <input type="password" id="confirmPassword"
+                       placeholder="Re-enter your password" autocomplete="new-password"/>
+                <button type="button" class="toggle-pw" onclick="togglePassword('confirmPassword','toggleCpBtn')" id="toggleCpBtn">👁️</button>
+            </div>
+            <span class="field-error" id="confirmError"></span>
+        </div>
+
+        <button type="submit" class="register-btn" id="registerBtn">
+            <span id="btnText">Create Account</span>
+            <span id="btnSpinner" style="display:none">⏳ Creating…</span>
+        </button>
+
+    </form>
+
+    <div class="extra-links">
+        <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+        <p><a th:href="@{/}">← Back to Home</a></p>
+    </div>
+</div>
+
+<script>
+// ── Rules ────────────────────────────────────────────────────
+const rules = {
+    len:     { el: document.getElementById('rule-len'),     test: v => v.length >= 8 },
+    upper:   { el: document.getElementById('rule-upper'),   test: v => /[A-Z]/.test(v) },
+    lower:   { el: document.getElementById('rule-lower'),   test: v => /[a-z]/.test(v) },
+    num:     { el: document.getElementById('rule-num'),     test: v => /[0-9]/.test(v) },
+    special: { el: document.getElementById('rule-special'), test: v => /[^A-Za-z0-9]/.test(v) },
+};
+
+const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+const strengthColors = ['', '#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#27ae60'];
+
+// ── Password strength ─────────────────────────────────────────
+function checkStrength(val) {
+    let score = Object.values(rules).filter(r => r.test(val)).length;
+    document.getElementById('strengthFill').style.width = (score * 20) + '%';
+    document.getElementById('strengthFill').style.background = strengthColors[score];
+    document.getElementById('strengthLabel').textContent = strengthLabels[score];
+    document.getElementById('strengthLabel').style.color = strengthColors[score];
+    return score;
+}
+
+// ── Live rule checklist ───────────────────────────────────────
+function updateRules(val) {
+    Object.entries(rules).forEach(([key, rule]) => {
+        const icon = rule.el.querySelector('.rule-icon');
+        if (rule.test(val)) {
+            rule.el.classList.add('rule-ok');
+            rule.el.classList.remove('rule-fail');
+            icon.textContent = '✅';
+        } else {
+            rule.el.classList.remove('rule-ok');
+            if (val.length > 0) {
+                rule.el.classList.add('rule-fail');
+                icon.textContent = '❌';
+            } else {
+                rule.el.classList.remove('rule-fail');
+                icon.textContent = '○';
+            }
+        }
+    });
+}
+
+// ── Field helpers ─────────────────────────────────────────────
+function setError(input, errEl, msg) {
+    input.classList.add('input-invalid');
+    input.classList.remove('input-valid');
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+}
+function clearError(input, errEl) {
+    input.classList.remove('input-invalid');
+    input.classList.add('input-valid');
+    errEl.textContent = '';
+    errEl.style.display = 'none';
+}
+
+// ── Validators ────────────────────────────────────────────────
+const nameEl    = document.getElementById('name');
+const emailEl   = document.getElementById('email');
+const passEl    = document.getElementById('password');
+const confirmEl = document.getElementById('confirmPassword');
+
+function validateName() {
+    const v = nameEl.value.trim();
+    if (!v) { setError(nameEl, document.getElementById('nameError'), 'Full name is required.'); return false; }
+    if (v.length < 2) { setError(nameEl, document.getElementById('nameError'), 'Name must be at least 2 characters.'); return false; }
+    if (!/^[a-zA-Z\s]+$/.test(v)) { setError(nameEl, document.getElementById('nameError'), 'Name can only contain letters and spaces.'); return false; }
+    clearError(nameEl, document.getElementById('nameError')); return true;
+}
+
+function validateEmail() {
+    const v = emailEl.value.trim();
+    if (!v) { setError(emailEl, document.getElementById('emailError'), 'Email is required.'); return false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { setError(emailEl, document.getElementById('emailError'), 'Enter a valid email address.'); return false; }
+    clearError(emailEl, document.getElementById('emailError')); return true;
+}
+
+function validatePassword() {
+    const v = passEl.value;
+    const errEl = document.getElementById('passwordError');
+    if (!v) { setError(passEl, errEl, 'Password is required.'); return false; }
+    const score = Object.values(rules).filter(r => r.test(v)).length;
+    if (score < 5) { setError(passEl, errEl, 'Password does not meet all requirements.'); return false; }
+    clearError(passEl, errEl); return true;
+}
+
+function validateConfirm() {
+    const errEl = document.getElementById('confirmError');
+    if (!confirmEl.value) { setError(confirmEl, errEl, 'Please confirm your password.'); return false; }
+    if (confirmEl.value !== passEl.value) { setError(confirmEl, errEl, 'Passwords do not match.'); return false; }
+    clearError(confirmEl, errEl); return true;
+}
+
+// ── Event listeners ───────────────────────────────────────────
+nameEl.addEventListener('blur', validateName);
+nameEl.addEventListener('input', () => { if (nameEl.classList.contains('input-invalid')) validateName(); });
+
+emailEl.addEventListener('blur', validateEmail);
+emailEl.addEventListener('input', () => { if (emailEl.classList.contains('input-invalid')) validateEmail(); });
+
+passEl.addEventListener('input', () => {
+    const v = passEl.value;
+    document.getElementById('strengthWrap').style.display = v ? 'flex' : 'none';
+    document.getElementById('pwdRules').style.display = 'block';
+    updateRules(v);
+    checkStrength(v);
+    if (passEl.classList.contains('input-invalid')) validatePassword();
+    if (confirmEl.value) validateConfirm();
+});
+passEl.addEventListener('blur', validatePassword);
+
+confirmEl.addEventListener('blur', validateConfirm);
+confirmEl.addEventListener('input', () => { if (confirmEl.classList.contains('input-invalid')) validateConfirm(); });
+
+// ── Form submit ───────────────────────────────────────────────
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    const ok = validateName() & validateEmail() & validatePassword() & validateConfirm();
+    if (!ok) {
+        e.preventDefault();
+        document.querySelector('.register-container').classList.add('shake');
+        setTimeout(() => document.querySelector('.register-container').classList.remove('shake'), 500);
+        return;
+    }
+    document.getElementById('btnText').style.display    = 'none';
+    document.getElementById('btnSpinner').style.display = 'inline';
+    document.getElementById('registerBtn').disabled = true;
+});
+
+// ── Toggle password visibility ────────────────────────────────
+function togglePassword(fieldId, btnId) {
+    const field = document.getElementById(fieldId);
+    const btn   = document.getElementById(btnId);
+    field.type  = field.type === 'password' ? 'text' : 'password';
+    btn.textContent = field.type === 'password' ? '👁️' : '🙈';
+}
+</script>
+</body>
+</html>

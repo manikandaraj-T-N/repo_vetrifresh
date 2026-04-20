@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Shop - Vetrifresh</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" th:href="@{/css/shop.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+   <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" th:href="@{/css/shop.css}"/>
+
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+   <div class="header-search">
+  <form th:action="@{/search}" method="get" style="display:flex;align-items:center;width:100%">
+    <span class="search-icon">🔍</span>
+    <input type="text" name="q"
+           placeholder="Search fresh vegetables, fruits…"
+           th:value="${param.q}"/>
+    <button type="submit" style="background:none;border:none;cursor:pointer;">→</button>
+  </form>
+</div>
+    <nav>
+      <ul>
+        <li><a th:href="@{/home}">Home</a></li>
+        <li><a th:href="@{/shop}" class="nav-active">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a th:href="@{/about}">About Us</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+   
+      <!-- wishlist -->
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i>
+    <span class="cart-badge" id="wishlistCount" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+      
+      <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+  <button class="icon-btn" title="Cart">
+    🛒
+    <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+  </button>
+</a>
+
+
+      <!-- Show login/logout based on authentication -->
+     <div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name">User</span>
+    <a th:href="@{/logout}">
+        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">
+        <button class="icon-btn" title="Account">👤</button>
+    </a>
+</div>
+    </div>
+  </div>
+</header>
+
+<div class="shop-wrapper">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+
+    <!-- Category Filter -->
+    <div class="filter-block">
+      <div class="filter-title" onclick="toggleFilter('catFilter')">
+        All Categories <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="filter-body" id="catFilter">
+        <ul class="cat-list">
+          <li th:classappend="${selectedCategory == null or selectedCategory == 'all'} ? ' active' : ''">
+            <a href="/shop">All Products</a>
+          </li>
+          <li th:each="cat : ${categories}"
+              th:classappend="${selectedCategory == cat.slug} ? ' active' : ''">
+            <a th:href="@{/shop(category=${cat.slug})}" th:text="${cat.name}">Category</a>
+          </li>
+          <!-- Static fallback -->
+          <th:block th:if="${categories == null or categories.isEmpty()}">
+            <li><a href="/shop?category=fresh-fruit">Fresh Fruit</a></li>
+            <li><a href="/shop?category=fresh-vegetables">Fresh Vegetables</a></li>
+            <li><a href="/shop?category=meat-fish">Meat &amp; Fish</a></li>
+            <li><a href="/shop?category=snacks">Snacks</a></li>
+            <li><a href="/shop?category=beverages">Beverages</a></li>
+            <li><a href="/shop?category=beauty-health">Beauty &amp; Health</a></li>
+             <li><a href="/shop?category=beverages">Bread &amp; Bakery</a></li>
+              <li><a href="/shop?category=beverages">Baking Needs</a></li>
+                <li><a href="/shop?category=beverages">Cooking</a></li>
+                <li><a href="/shop?category=beverages">Diabetic Food</a></li>
+                <li><a href="/shop?category=beverages">Dish Detergent</a></li>
+                 <li><a href="/shop?category=beverages"> Oil</a></li>   
+
+          </th:block>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Price Filter -->
+    <div class="filter-block">
+      <div class="filter-title" onclick="toggleFilter('priceFilter')">
+        Price <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="filter-body" id="priceFilter">
+        <div class="price-range">
+          <input type="range" id="maxPrice" min="0" max="2000"
+                 th:value="${maxPrice} ?: 2000"
+                 oninput="updatePrice(this.value)"/>
+          <div class="price-labels">
+            <span>₹0</span>
+            <span id="priceDisplay"
+                  th:text="'₹' + (${maxPrice} ?: 2000)">₹2000</span>
+          </div>
+          <button class="apply-btn" onclick="applyPriceFilter()">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating Filter -->
+    <div class="filter-block">
+      <div class="filter-title" onclick="toggleFilter('ratingFilter')">
+        Rating <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="filter-body" id="ratingFilter">
+        <label class="rating-option" th:each="r : ${#numbers.sequence(5,1,-1)}">
+          <input type="radio" name="rating"
+                 th:value="${r}"
+                 th:checked="${selectedRating == r}"
+                 onchange="applyRatingFilter(this.value)"/>
+          <span th:each="s : ${#numbers.sequence(1,5)}">
+            <i th:class="${s <= r} ? 'fas fa-star' : 'far fa-star'"></i>
+          </span>
+          <span th:text="${r} + (${r} < 5 ? ' &amp; up' : '')"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Popular Tags -->
+    <div class="filter-block">
+      <div class="filter-title">Popular Tag</div>
+      <div class="filter-body">
+<div class="tags-wrap">
+  <span th:each="t : ${allTags}"
+        th:text="${t}"
+        th:classappend="${t == activeTag} ? ' active' : ''"
+        th:attr="data-tag=${t}"
+        onclick="filterTag(this.dataset.tag)"
+        class="tag">
+  </span>
+</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="shop-main">
+
+    <!-- Sort Bar -->
+    <div class="sort-bar">
+      <div class="sort-left">
+        <span th:text="${totalProducts} + ' Products found'">24 Products found</span>
+      </div>
+      <div class="sort-right">
+        <label>Sort by:</label>
+        <select onchange="applySort(this.value)">
+          <option value="latest"   th:selected="${sort == 'latest'}">Latest</option>
+          <option value="price-low"  th:selected="${sort == 'price-low'}">Price: Low to High</option>
+          <option value="price-high" th:selected="${sort == 'price-high'}">Price: High to Low</option>
+          <option value="rating"   th:selected="${sort == 'rating'}">Top Rated</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid">
+      <div class="product-card" th:each="product : ${products}">
+
+  <!-- Out of Stock Badge -->
+  <div class="out-of-stock-badge" th:if="${!product.inStock}">Out of Stock</div>
+
+  <!-- Image Area -->
+  <div class="product-img-wrapper">
+    <a th:href="@{/product/{id}(id=${product.id})}">
+      <img th:src="${product.imageUrl}"
+           th:alt="${product.name}"
+           class="product-img"/>
+    </a>
+
+    <!-- Wishlist + Quick View — top right -->
+    <div class="card-actions">
+      <form th:action="@{/wishlist/add}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <button type="submit" class="action-btn" title="Add to Wishlist">
+          <i class="far fa-heart"></i>
+        </button>
+      </form>
+      <button class="action-btn" title="Quick View"
+              th:onclick="'quickView(' + ${product.id} + ')'">
+        <i class="far fa-eye"></i>
+      </button>
+    </div>
+
+    <!-- Hover overlay: description + View Cart -->
+    <div class="card-hover-overlay">
+      <p class="hover-desc"
+         th:text="${product.description} ?: 'Fresh organic product.'">
+        Fresh organic product.
+      </p>
+      <a th:href="@{/cart}" class="view-cart-btn">
+        View Cart <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Rating badge — bottom right of image -->
+    <div class="rating-badge" th:if="${product.rating != null}">
+      <i class="fas fa-star"></i>
+      <span th:text="${product.rating}">4.5</span>
+    </div>
+  </div>
+
+  <!-- Product Info -->
+  <div class="product-info">
+    <div class="product-name" th:text="${product.name}">Product Name</div>
+    <div class="product-price">
+      <span class="price-current"
+            th:text="'₹' + ${product.price} + '/' + ${product.unit}">₹199/kg</span>
+      <span class="price-old"
+            th:if="${product.originalPrice != null}"
+            th:text="'₹' + ${product.originalPrice}">₹320</span>
+    </div>
+
+    <!-- Stars + Cart button on same row -->
+    <div class="product-footer">
+      <div class="star-row">
+        <th:block th:if="${product.rating != null}"
+                  th:each="s : ${#numbers.sequence(1,5)}">
+          <i th:class="${s <= product.rating.intValue()} ? 'fas fa-star' : 'far fa-star'"></i>
+        </th:block>
+        <th:block th:if="${product.rating == null}">
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+        </th:block>
+      </div>
+
+      <!-- Add to Cart -->
+      <form th:action="@{/cart/add}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <input type="hidden" name="quantity" value="1"/>
+        <button type="submit" class="add-cart-btn"
+                th:disabled="${!product.inStock}" title="Add to Cart">
+          <i class="fas fa-shopping-bag"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+    </div>
+
+  </main>
+</div>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+ 
+  <div class="footer__top">
+ 
+    <!-- About -->
+    <div class="footer__about">
+      <h3 class="footer__heading">About Vetri Fresh</h3>
+      <p class="footer__desc">
+        Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui,
+        eget bibendum magna congue nec.
+      </p>
+      <div class="footer__contact">
+        <span class="footer__contact-item">7836389098</span>
+        <span class="footer__contact-or">or</span>
+        <span class="footer__contact-item">vetrifresh@gmail.com</span>
+      </div>
+    </div>
+ 
+    <!-- My Account -->
+    <div class="footer__col">
+      <h3 class="footer__heading">My Account</h3>
+      <ul class="footer__links">
+        <li><a href="#">My Account</a></li>
+        <li><a href="#">Order History</a></li>
+        <li><a href="#" class="footer__link--active">Shoping Cart</a></li>
+        <li><a href="#">Wishlist</a></li>
+        <li><a href="#">Settings</a></li>
+      </ul>
+    </div>
+ 
+    <!-- Helps -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Helps</h3>
+      <ul class="footer__links">
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Faqs</a></li>
+        <li><a href="#">Terms &amp; Condition</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+ 
+    <!-- Proxy -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Proxy</h3>
+      <ul class="footer__links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Product</a></li>
+        <li><a href="#">Products Details</a></li>
+        <li><a href="#">Track Order</a></li>
+      </ul>
+    </div>
+ 
+    <!-- Instagram -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Instagram</h3>
+      <div class="footer__insta-grid">
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&q=70" alt="Instagram 1" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=100&q=70" alt="Instagram 2" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=100&q=70" alt="Instagram 3" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=100&q=70" alt="Instagram 4" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1543168256-418811576931?w=100&q=70" alt="Instagram 5" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1506617564039-2f3b650b7010?w=100&q=70" alt="Instagram 6" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1490885578174-acda8905c2c6?w=100&q=70" alt="Instagram 7" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1467453678174-768ec283a940?w=100&q=70" alt="Instagram 8" /></a>
+      </div>
+    </div>
+ 
+  </div>
+ 
+  <!-- Bottom Bar -->
+  <div class="footer__bottom">
+ 
+    <div class="footer__socials">
+      <a href="#" class="footer__social footer__social--fb">f</a>
+      <a href="#" class="footer__social">𝕏</a>
+      <a href="#" class="footer__social">𝐏</a>
+      <a href="#" class="footer__social">◎</a>
+    </div>
+ 
+    <p class="footer__copy">VetriFresh eCommerce &copy; 2021. All Rights Reserved</p>
+ 
+    <div class="footer__payments">
+      <span class="footer__pay footer__pay--apple">Apple Pay</span>
+      <span class="footer__pay footer__pay--visa">VISA</span>
+      <span class="footer__pay footer__pay--discover">DISCOVER</span>
+      <span class="footer__pay footer__pay--mastercard">
+        <span class="mc-left"></span>
+        <span class="mc-right"></span>
+      </span>
+      <span class="footer__pay footer__pay--secure">🔒 Secure Payment</span>
+    </div>
+ 
+  </div>
+ 
+</footer>
+
+<script th:src="@{/js/shop.js}"></script>
+</body>
+</html>

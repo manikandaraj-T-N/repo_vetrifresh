@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — VetriFresh</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}">
+  <link rel="stylesheet" th:href="@{/css/cart.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="cart-page">
+  <h2 class="cart-page-title">My Orders</h2>
+
+  <div th:if="${#lists.isEmpty(orders)}" class="empty-cart">
+    <div class="empty-icon">📦</div>
+    <h3>No orders yet!</h3>
+    <p>You haven't placed any orders.</p>
+    <a th:href="@{/shop}" class="btn-shop">Start Shopping →</a>
+  </div>
+
+  <div th:unless="${#lists.isEmpty(orders)}">
+    <div th:each="order : ${orders}" class="cart-card" style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;
+                  padding-bottom:12px;border-bottom:1px solid #f0f0f0;margin-bottom:12px;">
+        <div>
+          <strong style="color:#1b4332" th:text="'Order #' + ${order.orderNumber}">—</strong>
+          <span style="color:#888;font-size:13px;margin-left:12px;"
+                th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy')}">—</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+
+          <!-- ✅ Fixed: single ${...}, all on one line -->
+          <span th:text="${order.status}"
+                th:class="${order.status.name() == 'DELIVERED' ? 'badge-yes' : order.status.name() == 'CANCELLED' ? 'badge-no' : 'badge-pending'}">
+            PENDING
+          </span>
+
+          <a th:href="@{/orders/{id}(id=${order.id})}"
+             style="color:#2d6a4f;font-size:13px;font-weight:600;">View Details →</a>
+        </div>
+      </div>
+
+      <div th:each="item : ${order.orderItems}"
+           style="display:flex;justify-content:space-between;font-size:14px;
+                  padding:6px 0;color:#555;">
+        <span th:text="${item.product.name} + ' × ' + ${item.quantity}">—</span>
+        <span th:text="'₹' + ${item.totalPrice}">—</span>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-top:12px;
+                  padding-top:12px;border-top:1px solid #f0f0f0;">
+        <span style="font-size:14px;color:#888;">Total</span>
+        <strong style="color:#1b4332" th:text="'₹' + ${order.totalAmount}">—</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.badge-yes     { background:#d8f3dc; color:#2d6a4f; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; }
+.badge-no      { background:#ffe0e0; color:#c0392b; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; }
+.badge-pending { background:#fff3cd; color:#856404; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; }
+</style>
+</body>
+</html>

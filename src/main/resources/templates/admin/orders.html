@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Orders</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">VetriFresh Admin</div>
+    <nav>
+      <a th:href="@{/admin/dashboard}" ><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categories</a>
+      <a th:href="@{/admin/orders}" class="active"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/blogs}"><i class="fas fa-newspaper"></i> Blogs</a>
+      <a th:href="@{/home}"><i class="fas fa-eye"></i> View Site</a>
+      <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-page-title">Orders</div>
+
+    <div th:if="${successMessage}" class="alert alert-success"
+         th:text="${successMessage}"></div>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="order : ${orders}">
+            <td th:text="${order.orderNumber}">—</td>
+            <td th:text="${order.user.name}">—</td>
+            <td th:text="${order.orderItems.size()} + ' items'">—</td>
+            <td th:text="'₹' + ${order.totalAmount}">—</td>
+            <td>
+              <span th:text="${order.paymentStatus}"
+                    th:class="${order.paymentStatus.name() == 'PAID'} ? 'badge-yes' : 'badge-no'">
+              </span>
+            </td>
+            <td th:text="${order.status}">—</td>
+            <td th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy')}">-</td>
+            <td>
+              <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post"
+                    style="display:flex;gap:6px;">
+                <select name="status" class="form-group select" style="padding:6px;border-radius:6px;border:1px solid #ddd;">
+                  <option th:each="s : ${statuses}"
+                          th:value="${s}"
+                          th:text="${s}"
+                          th:selected="${s == order.status}">
+                  </option>
+                </select>
+                <button type="submit" class="btn-save" style="padding:6px 12px;">
+                  Update
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>

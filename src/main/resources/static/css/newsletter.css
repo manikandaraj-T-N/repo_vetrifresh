@@ -1,0 +1,49 @@
+/* ===================== NEWSLETTER ===================== */
+    .newsletter {
+      max-width: 1280px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+    .newsletter-box {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border-radius: 24px;
+      padding: 56px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .newsletter-box::before {
+      content: '🌿';
+      position: absolute;
+      right: -20px; top: -20px;
+      font-size: 180px;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+    .newsletter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 10px;
+    }
+    .newsletter-sub { font-size: 15px; color: var(--text-mid); }
+    .newsletter-form { display: flex; gap: 12px; }
+    .newsletter-form input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--white);
+      outline: none;
+      transition: var(--transition);
+    }
+    .newsletter-form input:focus {
+      border-color: var(--green-bright);
+      box-shadow: 0 0 0 3px rgba(58,170,71,0.12);
+    }

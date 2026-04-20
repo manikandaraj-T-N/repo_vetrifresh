@@ -1,0 +1,193 @@
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f5f0; font-family: 'DM Sans', sans-serif; color: #222; }
+
+    /* ── Breadcrumb Banner ── */
+    .breadcrumb {
+      background: #1a1a1a;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #aaa;
+      position: relative;
+      overflow: hidden;
+    }
+    .breadcrumb::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('/images/vegetables.jpg') center/cover no-repeat;
+      opacity: 0.18;
+    }
+    .breadcrumb a    { color: #4caf50; text-decoration: none; position: relative; }
+    .breadcrumb span { position: relative; color: #4caf50; font-weight: 600; }
+    .breadcrumb i    { position: relative; color: #fff; font-size: 16px; }
+    .breadcrumb .sep { position: relative; color: #666; }
+
+    /* ── Page Wrapper ── */
+    .contact-wrapper {
+      max-width: 1100px;
+      margin: 50px auto;
+      padding: 0 20px 70px;
+    }
+
+    /* ── Two-column layout ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Left Info Card ── */
+    .info-card {
+      background: #e8f5e3;
+      border-radius: 16px;
+      padding: 44px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 28px 0;
+      border-bottom: 1px solid #c5ddb8;
+    }
+    .info-item:last-child { border-bottom: none; }
+
+    .info-item .info-icon {
+      font-size: 28px;
+      color: #2e7d32;
+      margin-bottom: 14px;
+      width: 52px; height: 52px;
+      border: 1.5px solid #2e7d32;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .info-item p {
+      font-size: 14px;
+      color: #2d5a27;
+      line-height: 1.7;
+    }
+
+    /* ── Right Form Card ── */
+    .form-card {
+      background: #3a9e4a;
+      border-radius: 16px;
+      padding: 44px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('/images/vegetables.jpg') center/cover no-repeat;
+      opacity: 0.22;
+      border-radius: 16px;
+    }
+
+    .form-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a3a1a;
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .form-card input,
+    .form-card textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      background: rgba(255,255,255,0.92);
+      color: #333;
+      outline: none;
+      transition: box-shadow 0.2s;
+      position: relative;
+    }
+    .form-card input:focus,
+    .form-card textarea:focus {
+      box-shadow: 0 0 0 2px #2e7d32;
+    }
+    .form-card input::placeholder,
+    .form-card textarea::placeholder { color: #999; }
+
+    .form-full {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .form-card textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
+    .btn-submit {
+      display: block;
+      margin: 20px auto 0;
+      background: #1b5e20;
+      color: #fff;
+      border: none;
+      padding: 14px 52px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      position: relative;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-submit:hover { background: #145214; transform: translateY(-1px); }
+
+    /* ── Map Section ── */
+    .map-section {
+      margin-top: 40px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .map-section iframe {
+      width: 100%;
+      height: 340px;
+      border: none;
+      display: block;
+    }
+
+    /* ── Success message ── */
+    .success-msg {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      text-align: center;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row     { grid-template-columns: 1fr; }
+      .form-card    { padding: 28px 20px; }
+      .info-card    { padding: 28px 20px; }
+    }

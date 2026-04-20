@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Login - Vetrifresh</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="brand">
+        <span class="brand-icon">🌿</span>
+        <h2>Welcome Back</h2>
+        <p class="brand-sub">Sign in to your VetriFresh account</p>
+    </div>
+
+    <!-- Server-side messages -->
+    <div th:if="${param.error}" class="alert alert-error">
+        <span class="alert-icon">⚠️</span> Invalid email or password. Please try again.
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success">
+        <span class="alert-icon">✅</span> You have been logged out successfully.
+    </div>
+
+    <form th:action="@{/login}" method="post" id="loginForm" novalidate>
+
+        <div class="form-group">
+            <label for="username">Email Address</label>
+            <div class="input-wrap">
+                <span class="input-icon">📧</span>
+                <input type="text" id="username" name="username"
+                       placeholder="Enter your email" autocomplete="email"/>
+            </div>
+            <span class="field-error" id="emailError"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="password" name="password"
+                       placeholder="Enter your password" autocomplete="current-password"/>
+                <button type="button" class="toggle-pw" onclick="togglePassword()" title="Show/Hide password">👁️</button>
+            </div>
+            <span class="field-error" id="passwordError"></span>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+            <span id="btnText">Login</span>
+            <span id="btnSpinner" style="display:none">⏳ Signing in…</span>
+        </button>
+
+    </form>
+
+    <div class="extra-links">
+        <p>Don't have an account? <a th:href="@{/register}">Register</a></p>
+        <p><a th:href="@{/}">← Back to Home</a></p>
+    </div>
+
+</div>
+
+<script>
+    const form     = document.getElementById('loginForm');
+    const emailEl  = document.getElementById('username');
+    const passEl   = document.getElementById('password');
+    const emailErr = document.getElementById('emailError');
+    const passErr  = document.getElementById('passwordError');
+
+    // ── Validators ──────────────────────────────────────────
+    function validateEmail() {
+        const val = emailEl.value.trim();
+        if (!val) {
+            setError(emailEl, emailErr, 'Email is required.');
+            return false;
+        }
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!re.test(val)) {
+            setError(emailEl, emailErr, 'Enter a valid email address.');
+            return false;
+        }
+        clearError(emailEl, emailErr);
+        return true;
+    }
+
+    function validatePassword() {
+        const val = passEl.value;
+        if (!val) {
+            setError(passEl, passErr, 'Password is required.');
+            return false;
+        }
+        if (val.length < 6) {
+            setError(passEl, passErr, 'Password must be at least 6 characters.');
+            return false;
+        }
+        clearError(passEl, passErr);
+        return true;
+    }
+
+    // ── Helpers ──────────────────────────────────────────────
+    function setError(input, errEl, msg) {
+        input.classList.add('input-invalid');
+        input.classList.remove('input-valid');
+        errEl.textContent = msg;
+        errEl.style.display = 'block';
+    }
+
+    function clearError(input, errEl) {
+        input.classList.remove('input-invalid');
+        input.classList.add('input-valid');
+        errEl.textContent = '';
+        errEl.style.display = 'none';
+    }
+
+    // ── Live validation on blur ──────────────────────────────
+    emailEl.addEventListener('blur', validateEmail);
+    passEl.addEventListener('blur', validatePassword);
+
+    // Clear error as user types
+    emailEl.addEventListener('input', () => {
+        if (emailEl.classList.contains('input-invalid')) validateEmail();
+    });
+    passEl.addEventListener('input', () => {
+        if (passEl.classList.contains('input-invalid')) validatePassword();
+    });
+
+    // ── Form submit ──────────────────────────────────────────
+    form.addEventListener('submit', function (e) {
+        const emailOk = validateEmail();
+        const passOk  = validatePassword();
+
+        if (!emailOk || !passOk) {
+            e.preventDefault();
+            // Shake the container
+            document.querySelector('.login-container').classList.add('shake');
+            setTimeout(() => document.querySelector('.login-container').classList.remove('shake'), 500);
+            return;
+        }
+
+        // Show loading state
+        document.getElementById('btnText').style.display    = 'none';
+        document.getElementById('btnSpinner').style.display = 'inline';
+        document.getElementById('loginBtn').disabled = true;
+    });
+
+    // ── Toggle password visibility ───────────────────────────
+    function togglePassword() {
+        const btn = document.querySelector('.toggle-pw');
+        if (passEl.type === 'password') {
+            passEl.type = 'text';
+            btn.textContent = '🙈';
+        } else {
+            passEl.type = 'password';
+            btn.textContent = '👁️';
+        }
+    }
+</script>
+
+</body>
+</html>

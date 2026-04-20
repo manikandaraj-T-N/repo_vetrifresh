@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Cart — VetriFresh</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<div class="topbar">
+  🌿 <span>Free delivery on orders above ₹500</span>
+  &nbsp;|&nbsp;
+  <span>Summer Sale: Up to 30% OFF</span>
+  &nbsp;|&nbsp;
+  📞 <span>+91 93738 01410</span>
+</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search fresh vegetables, fruits…"/>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- wish and cartcount -->
+    <div class="header-actions">
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i><span class="cart-badge" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+
+      <button class="icon-btn" title="Cart">
+        🛒 <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+      </button>
+
+
+      <div sec:authorize="isAuthenticated()">
+        <span sec:authentication="name">User</span>
+        <a th:href="@{/logout}">
+          <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </a>
+      </div>
+      <div sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">
+          <button class="icon-btn" title="Account">👤</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="cart-page">
+
+  <!-- Breadcrumb -->
+  <div class="cart-breadcrumb">
+    <a th:href="@{/}">Home</a>
+    <span>/</span>
+    <span>Cart</span>
+  </div>
+
+  <h2 class="cart-page-title">Your Cart 🛒</h2>
+
+  <!-- Flash Messages -->
+  <div th:if="${successMessage}" class="alert alert-success">
+    <i class="fas fa-circle-check"></i>
+    <span th:text="${successMessage}">Success</span>
+  </div>
+  <div th:if="${errorMessage}" class="alert alert-error">
+    <i class="fas fa-circle-exclamation"></i>
+    <span th:text="${errorMessage}">Error</span>
+  </div>
+
+  <!-- ── EMPTY CART ── -->
+  <div th:if="${#lists.isEmpty(cartItems)}" class="empty-cart">
+    <div class="empty-icon">🛒</div>
+    <h3>Your cart is empty!</h3>
+    <p>Looks like you haven't added anything yet.</p>
+    <a th:href="@{/shop}" class="btn-shop">
+      <i class="fas fa-arrow-left"></i> Continue Shopping
+    </a>
+  </div>
+
+  <!-- ── CART CONTENT ── -->
+  <div th:unless="${#lists.isEmpty(cartItems)}" class="cart-layout">
+
+    <!-- Left: Items Table -->
+    <div class="cart-card">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="item : ${cartItems}">
+
+            <!-- Product -->
+            <td>
+              <div class="product-cell">
+                <img th:src="${item.product.imageUrl} ?: '/images/placeholder.jpg'"
+                     th:alt="${item.product.name}"
+                     class="cart-item-img"/>
+                <div class="product-cell-info">
+                  <span class="product-cell-name" th:text="${item.product.name}">Product</span>
+                  <span class="product-cell-unit" th:text="${item.product.unit}">500g</span>
+                </div>
+              </div>
+            </td>
+
+            <!-- Price -->
+            <td class="price-cell" th:text="'₹' + ${item.product.price}">₹0</td>
+
+            <!-- Quantity -->
+            <td>
+              <form th:action="@{/cart/update/{id}(id=${item.id})}" method="post"
+                    class="qty-form">
+                
+                <div class="qty-wrapper">
+                  <input type="number"
+                         name="quantity"
+                         th:value="${item.quantity}"
+                         min="0"
+                         max="99"
+                         class="qty-input"/>
+                  <button title="submit button" type="submit" class="btn-update">
+                    <i class="fas fa-rotate-right"></i>
+                  </button>
+                </div>
+              </form>
+            </td>
+
+            <!-- Subtotal -->
+            <td class="subtotal-cell">
+              <strong th:text="'₹' + ${item.product.price * item.quantity}">₹0</strong>
+            </td>
+
+            <!-- Remove -->
+            <td>
+              <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
+             
+                <button type="submit" class="btn-remove" title="Remove item">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </form>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Table Footer Actions -->
+      <div class="cart-table-footer">
+        <a th:href="@{/shop}" class="btn-continue">
+          <i class="fas fa-arrow-left"></i> Continue Shopping
+        </a>
+        <form th:action="@{/cart/clear}" method="post">
+          
+          <button type="submit" class="btn-clear">
+            <i class="fas fa-trash"></i> Clear Cart
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right: Order Summary -->
+    <div class="cart-summary">
+        <div class="summary-title">Order Summary</div>
+
+    <!-- Subtotal row -->
+  <div class="summary-row">
+    <span>Subtotal (<span th:text="${cartCount}">0</span> items)</span>
+    <span id="summarySubtotal" th:text="'₹' + ${cartTotal}">₹0</span>
+  </div>
+
+  <!-- Delivery row -->
+  <div class="summary-row">
+    <span>Delivery</span>
+    <span id="deliveryDisplay"
+          th:text="${cartTotal >= 500} ? 'FREE' : '₹40'"
+          th:class="${cartTotal >= 500} ? 'badge-yes' : ''">₹40</span>
+  </div>
+
+  <!-- Free delivery hint -->
+  <div class="free-delivery-hint"
+       th:style="${cartTotal >= 500} ? 'display:none' : 'display:flex'">
+    <i class="fas fa-truck"></i>
+    Add ₹<span id="freeDeliveryRemaining" th:text="${500 - cartTotal}">0</span> more for FREE delivery!
+  </div>
+
+  <div class="summary-divider"></div>
+
+  <!-- Total row — must have class summary-row total for JS -->
+  <div class="summary-row total">
+    <span>Total</span>
+    <span id="grandTotal"
+          th:text="${cartTotal >= 500} ? '₹' + ${cartTotal} : '₹' + (${cartTotal} + 40)">₹0</span>
+  </div>
+
+  <!-- Checkout form with hidden inputs -->
+ <a th:href="@{/checkout}" class="btn-checkout">
+  Proceed to Checkout <i class="fas fa-arrow-right"></i>
+</a>
+
+  <!-- Promo Code -->
+  <div class="promo-section">
+    <div class="promo-label">Have a promo code?</div>
+    <div class="promo-row">
+      <input type="text" class="promo-input" placeholder="Enter code…"/>
+      <button class="btn-promo">Apply</button>
+    </div>
+  </div>
+
+  <!-- Trust Badges -->
+  <div class="trust-badges">
+    <div class="trust-item">
+      <i class="fas fa-lock"></i>
+      <span>Secure Checkout</span>
+    </div>
+    <div class="trust-item">
+      <i class="fas fa-rotate-left"></i>
+      <span>Easy Returns</span>
+    </div>
+    <div class="trust-item">
+      <i class="fas fa-leaf"></i>
+      <span>100% Organic</span>
+    </div>
+  </div>
+</div>
+
+  </div>
+</main>
+
+<!-- ── FOOTER (reuse from home.html) ── -->
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+
+<script>
+  document.querySelectorAll('.qty-input').forEach(function(input) {
+    input.addEventListener('input', function() {
+      const row = this.closest('tr');
+      const price = parseFloat(row.querySelector('.price-cell').textContent.replace('₹', ''));
+      const qty = parseInt(this.value) || 0;
+      row.querySelector('.subtotal-cell strong').textContent = '₹' + (price * qty).toFixed(2);
+      recalculate();
+    });
+  });
+
+  function recalculate() {
+    let subtotal = 0;
+    document.querySelectorAll('.subtotal-cell strong').forEach(function(el) {
+      subtotal += parseFloat(el.textContent.replace('₹', '')) || 0;
+    });
+
+    const delivery = subtotal >= 500 ? 0 : 40;
+    const total = subtotal + delivery;
+
+    // Update display
+    document.getElementById('summarySubtotal').textContent = '₹' + subtotal.toFixed(2);
+    document.getElementById('grandTotal').textContent = '₹' + total.toFixed(2);
+
+    // Update delivery badge
+    const deliveryEl = document.getElementById('deliveryDisplay');
+    if (deliveryEl) {
+      deliveryEl.textContent = subtotal >= 500 ? 'FREE' : '₹40';
+      deliveryEl.className   = subtotal >= 500 ? 'badge-yes' : '';
+    }
+
+    // Free delivery hint
+    const hint = document.querySelector('.free-delivery-hint');
+    if (hint) {
+      hint.style.display = subtotal >= 500 ? 'none' : 'flex';
+      if (subtotal < 500) {
+        document.getElementById('freeDeliveryRemaining').textContent = (500 - subtotal).toFixed(0);
+      }
+    }
+
+    // Update hidden inputs for checkout form
+    document.getElementById('hiddenSubtotal').value = subtotal.toFixed(2);
+    document.getElementById('hiddenDelivery').value = delivery.toFixed(2);
+    document.getElementById('hiddenTotal').value    = total.toFixed(2);
+  }
+</script>
+
+
+</body>
+</html>

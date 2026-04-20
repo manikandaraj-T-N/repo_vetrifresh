@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${blog.title} + ' — VetriFresh'">Blog</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" th:href="@{/css/blog.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<div class="topbar">🌿 Free delivery on orders above ₹500</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+    <nav><ul>
+      <li><a th:href="@{/home}">Home</a></li>
+      <li><a th:href="@{/shop}">Shop</a></li>
+      <li><a th:href="@{/blog}" class="active">Blog</a></li>
+    </ul></nav>
+    <div class="header-actions">
+      <a th:href="@{/cart}" style="text-decoration:none;">
+        <button class="icon-btn">🛒
+          <span class="cart-badge" th:text="${cartCount} ?: '0'">0</span>
+        </button>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="blog-hero">
+  <div class="blog-hero-inner">
+    <div class="blog-breadcrumb">
+      <a th:href="@{/}">Home</a> <span>/</span>
+      <a th:href="@{/blog}">Blog</a> <span>/</span>
+      <span th:text="${blog.title}">Post</span>
+    </div>
+    <h1 th:text="${blog.title}">Blog Title</h1>
+  </div>
+</div>
+
+<div class="blog-layout">
+
+  <!-- Article -->
+  <main class="blog-main">
+    <div class="blog-detail-card">
+
+      <img alt="Blog image" th:src="${blog.imageUrl} ?: '/images/post-1.jpg'"
+           th:alt="${blog.title}"
+           class="blog-detail-img"/>
+
+      <div class="blog-detail-meta">
+        <span><i class="fas fa-user"></i>
+          By <span th:text="${blog.author} ?: 'Admin'">Admin</span>
+        </span>
+        <span><i class="fas fa-calendar"></i>
+          <span th:text="${#temporals.format(blog.createdAt, 'dd MMM yyyy')}">Date</span>
+        </span>
+        <span><i class="fas fa-tag"></i>
+          <span th:text="${blog.category} ?: 'Food'">Category</span>
+        </span>
+      </div>
+
+      <div class="blog-detail-body" th:utext="${blog.content}">
+        Content here
+      </div>
+
+      <div class="blog-detail-footer">
+        <a th:href="@{/blog}" class="btn-continue">
+          <i class="fas fa-arrow-left"></i> Back to Blog
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Sidebar -->
+  <aside class="blog-sidebar">
+    <div class="sidebar-widget">
+      <h4 class="widget-title">Recent Posts</h4>
+      <div class="recent-posts">
+        <div class="recent-post" th:each="post : ${recentPosts}">
+          <img alt="post image" th:src="${post.imageUrl} ?: '/images/post-1.jpg'"
+               th:alt="${post.title}"/>
+          <div>
+            <a th:href="@{/blog/{id}(id=${post.id})}"
+               th:text="${post.title}">Post title</a>
+            <span th:text="${#temporals.format(post.createdAt,'dd MMM yyyy')}">Date</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-widget sidebar-banner">
+      <div class="banner-content">
+        <span class="banner-discount">79% Discount</span>
+        <p>on your first order</p>
+        <a th:href="@{/shop}" class="btn-primary"
+           style="padding:10px 20px;border-radius:50px;font-size:14px;">
+          Shop Now →
+        </a>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogs | Admin - Vetrifresh</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="admin-layout">
+    
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">🌿 VetriFresh</div>
+    <nav>
+      <a th:href="@{/admin/dashboard}" ><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categories</a>
+      <a th:href="@{/admin/orders}"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/blogs}" class="active"><i class="fas fa-newspaper"></i> Blogs</a>
+      <a th:href="@{/home}"><i class="fas fa-eye"></i> View Site</a>
+      <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h1 class="admin-page-title">Blog Posts</h1>
+      <a th:href="@{/admin/blogs/new}" class="btn-save"><i class="fas fa-plus"></i> New Post</a>
+    </div>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th>Published</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="blog : ${blogs}">
+            <td th:text="${blog.title}">-</td>
+            <td th:text="${blog.category}">-</td>
+            <td th:text="${blog.author}">-</td>
+            <td th:text="${#temporals.format(blog.createdAt, 'dd MMM yyyy')}">-</td>
+            <td>
+              <span th:if="${blog.isPublished}"  class="badge-yes">✅ Published</span>
+              <span th:unless="${blog.isPublished}" class="badge-no">Draft</span>
+            </td>
+            <td>
+              <a th:href="@{/admin/blogs/edit/{id}(id=${blog.id})}"
+                 class="btn-edit">Edit</a>
+              <form th:action="@{/admin/blogs/delete/{id}(id=${blog.id})}"
+                    method="post" style="display:inline">
+                <button type="submit" class="btn-delete"
+                        onclick="return confirm('Delete this post?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+
+
+</body>
+</html>
+

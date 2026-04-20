@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Placed — VetriFresh</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<div style="text-align:center; padding: 80px 20px;">
+
+  <div style="font-size:64px; margin-bottom:16px;">🎉</div>
+
+  <h1 style="color:#1b4332; font-size:28px; margin-bottom:8px;">
+    Order Placed Successfully!
+  </h1>
+
+  <p style="color:#888; font-size:15px; margin-bottom:24px;">
+    Thank you for shopping with VetriFresh.
+  </p>
+
+  <div th:if="${order}" style="background:#f1f8f1; border-radius:12px;
+       padding:24px; max-width:400px; margin:0 auto 32px;">
+
+    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+      <span style="color:#888">Order Number</span>
+      <strong th:text="${order.orderNumber}">—</strong>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+      <span style="color:#888">Delivery</span>
+      <!-- ✅ Fixed: BigDecimal needs compareTo, no nested ${} -->
+      <span th:text="${order.deliveryCharge.compareTo(T(java.math.BigDecimal).ZERO) == 0 ? 'FREE' : '₹' + order.deliveryCharge}">—</span>
+    </div>
+
+    <div style="display:flex; justify-content:space-between;
+         border-top:1px solid #d8f3dc; padding-top:8px; margin-top:8px;">
+      <strong style="color:#1b4332">Total</strong>
+      <strong style="color:#1b4332" th:text="'₹' + ${order.totalAmount}">—</strong>
+    </div>
+
+    <div style="margin-top:12px;">
+      <span style="background:#d8f3dc; color:#2d6a4f; padding:4px 12px;
+            border-radius:20px; font-size:13px; font-weight:600;"
+            th:text="${order.status}">PENDING</span>
+    </div>
+  </div>
+
+  <a th:href="@{/home}"
+     style="background:#2d6a4f; color:#fff; padding:12px 28px;
+            border-radius:8px; text-decoration:none; font-size:15px;
+            font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+    <i class="fas fa-arrow-left"></i> Continue Shopping
+  </a>
+
+</div>
+
+</body>
+</html>

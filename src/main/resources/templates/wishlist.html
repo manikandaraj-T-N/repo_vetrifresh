@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+ lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist — VetriFresh</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}">
+  <link rel="stylesheet" th:href="@{/css/wishlist.css}">
+  <link rel="stylesheet" th:href="@{/css/newsletter.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+
+  <!-- ── TOP BAR ── -->
+<div class="topbar">
+  🌿 <span>Free delivery on orders above ₹500</span>
+  &nbsp;|&nbsp;
+  <span>Summer Sale: Up to 30% OFF</span>
+  &nbsp;|&nbsp;
+  📞 <span>+91 93738 01410</span>
+</div>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search fresh vegetables, fruits…"/>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a  th:href="@{/about}">About Us</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+
+
+    <button class="icon-btn" title="Wishlist">
+      <i class="far fa-heart"></i>
+      <span class="cart-badge" th:text="${wishlistCount} ?: '0'">0</span>
+    </button>
+ 
+
+  <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+    <button class="icon-btn" title="Cart">
+      🛒
+      <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+    </button>
+  </a>
+  ...
+</div>
+  </div>
+</header>
+
+<!-- <div class="cart-page">
+  <h2 class="cart-page-title">❤️ My Wishlist</h2>
+
+  <div th:if="${#lists.isEmpty(wishlistItems)}" class="empty-cart">
+    <div class="empty-icon">❤️</div>
+    <h3>Your wishlist is empty!</h3>
+    <a th:href="@{/shop}" class="btn-shop">Browse Products →</a>
+  </div>
+
+  <div th:unless="${#lists.isEmpty(wishlistItems)}" class="products-grid popular">
+    <div class="product-card" th:each="item : ${wishlistItems}">
+
+      <a th:href="@{/product/{id}(id=${item.product.id})}" style="text-decoration:none;color:inherit;">
+        <div class="product-img-wrapper popular">
+          <img th:src="${item.product.imageUrl} ?: '/images/placeholder.jpg'"
+               th:alt="${item.product.name}"/>
+        </div>
+        <div class="product-info popular">
+          <h4 th:text="${item.product.name}">Product</h4>
+          <div class="price">
+            <span class="current" th:text="'₹' + ${item.product.price}">₹0</span>
+          </div>
+        </div>
+      </a>
+
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <form th:action="@{/cart/add}" method="post" style="flex:1;">
+          <input type="hidden" name="productId" th:value="${item.product.id}"/>
+          <input type="hidden" name="quantity" value="1"/>
+          <button type="submit" class="btn-checkout" style="width:100%;padding:10px;">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+          </button>
+        </form>
+        <form th:action="@{/wishlist/remove/{id}(id=${item.id})}" method="post">
+          <button type="submit" class="btn-remove" style="padding:10px 12px;">
+            <i class="fas fa-trash"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div> -->
+
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a th:href="@{/home}"><i class="fas fa-home"></i></a>
+  <span class="sep">›</span>
+  <span>Wishlist</span>
+</div>
+ 
+<!-- Wishlist Content -->
+<div class="wishlist-wrapper">
+  <h2 class="wishlist-title">My Wishlist</h2>
+ 
+  <!-- Empty State -->
+  <div th:if="${#lists.isEmpty(wishlistItems)}" class="empty-wishlist">
+    <div class="empty-icon">❤️</div>
+    <h3>Your wishlist is empty!</h3>
+    <p>Save items you love and come back to them anytime.</p>
+    <a th:href="@{/shop}" class="btn-browse">Browse Products →</a>
+  </div>
+ 
+  <!-- Wishlist Table -->
+  <div th:unless="${#lists.isEmpty(wishlistItems)}">
+    <table class="wishlist-table">
+      <thead>
+        <tr>
+          <th style="width:45%">PRODUCT</th>
+          <th style="width:20%">PRICE</th>
+          <th style="width:15%">STOCK STATUS</th>
+          <th style="width:20%"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="item : ${wishlistItems}">
+ 
+          <!-- Product -->
+          <td>
+            <a th:href="@{/product/{id}(id=${item.product.id})}"
+               style="text-decoration:none;color:inherit;">
+              <div class="product-cell">
+                <img th:src="${item.product.imageUrl} ?: '/images/placeholder.jpg'"
+                     th:alt="${item.product.name}"/>
+                <span class="product-name" th:text="${item.product.name}">Product</span>
+              </div>
+            </a>
+          </td>
+ 
+          <!-- Price -->
+          <td>
+            <div class="price-cell">
+              <span class="current" th:text="'₹' + ${item.product.price}">₹0</span>
+              <span class="original"
+                    th:if="${item.product.originalPrice != null}"
+                    th:text="'₹' + ${item.product.originalPrice}"></span>
+            </div>
+          </td>
+ 
+          <!-- Stock Status -->
+          <td>
+            <span th:if="${item.product.stockQuantity != null and item.product.stockQuantity > 0}"
+                  class="badge-instock">In Stock</span>
+            <span th:unless="${item.product.stockQuantity != null and item.product.stockQuantity > 0}"
+                  class="badge-outofstock">Out of Stock</span>
+          </td>
+ 
+          <!-- Actions -->
+          <td>
+            <div class="actions-cell">
+              <!-- Add to Cart -->
+              <form th:action="@{/cart/add}" method="post">
+                <input type="hidden" name="productId" th:value="${item.product.id}"/>
+                <input type="hidden" name="quantity" value="1"/>
+                <button type="submit" class="btn-add-cart"
+                        th:disabled="${item.product.stockQuantity == null or item.product.stockQuantity <= 0}">
+                  Add to Cart
+                </button>
+              </form>
+ 
+              <!-- Remove -->
+              <form th:action="@{/wishlist/remove/{id}(id=${item.id})}" method="post">
+                <button type="submit" class="btn-remove-wish" title="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+ 
+        </tr>
+      </tbody>
+    </table>
+ 
+    <!-- Share Row -->
+    <div class="share-row">
+      <span>Share:</span>
+      <a href="https://facebook.com" target="_blank" class="share-btn share-fb">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" class="share-btn share-tw">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://pinterest.com" target="_blank" class="share-btn share-pi">
+        <i class="fab fa-pinterest-p"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="share-btn share-ig">
+        <i class="fab fa-instagram"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===============================NEWSLETTER===================================================== -->
+ 
+  <section class="newsletter">
+    <div class="newsletter-box">
+      <div>
+        <div class="section-tag">Stay Fresh</div>
+        <h2 class="newsletter-title"
+            th:text="${newsletterTitle} ?: 'Get the Freshest Deals, Straight to Your Inbox'">
+          Get the Freshest Deals, Straight to Your Inbox
+        </h2>
+        <p class="newsletter-sub"
+           th:text="${newsletterSub} ?: 'Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.'">
+          Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.
+        </p>
+      </div>
+      <div>
+        <!-- POST to /newsletter/subscribe -->
+        <form th:action="@{/newsletter/subscribe}" method="post" class="newsletter-form">
+          <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="email" name="email" placeholder="Enter your email address…" required/>
+          <button type="submit" class="btn-primary" style="padding:14px 24px;border-radius:50px">Subscribe</button>
+        </form>
+        <!-- Success / Error messages -->
+        <p th:if="${newsletterSuccess}" style="color:#7fff8a;font-size:13px;margin-top:8px"
+           th:text="${newsletterSuccess}">Subscribed!</p>
+        <p th:if="${newsletterError}" style="color:#ff6b6b;font-size:13px;margin-top:8px"
+           th:text="${newsletterError}">Error.</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:10px">🔒 No spam, ever. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+<!-- ==================footer==================================== -->
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+
+</body>
+</html>

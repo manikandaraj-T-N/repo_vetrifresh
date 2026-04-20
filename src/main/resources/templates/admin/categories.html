@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Categories-VetriFresh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="admin-logo">🌿 VetriFresh</div>
+    <nav>
+      <a th:href="@{/admin/dashboard}"><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/categories}" class="active"><i class="fas fa-tags"></i> Categories</a>
+      <a th:href="@{/admin/orders}"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/blogs}"><i class="fas fa-newspaper"></i> Blogs</a>
+      <a th:href="@{/home}"><i class="fas fa-eye"></i> View Site</a>
+      <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title">Categories</h1>
+      <a th:href="@{/admin/categories/new}" class="btn-add">
+        <i class="fas fa-plus"></i> Add Category
+      </a>
+    </div>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="cat : ${categories}">
+            <td th:text="${cat.id}">-</td>
+            <td th:text="${cat.name}">-</td>
+            <td th:text="${cat.slug}">-</td>
+            <td>
+              <img th:if="${cat.imageUrl != null}"
+                   th:src="${cat.imageUrl}"
+                   style="width:50px;height:50px;object-fit:contain;"/>
+              <span th:unless="${cat.imageUrl != null}">—</span>
+            </td>
+            <td class="action-btns">
+              <a th:href="@{/admin/categories/edit/{id}(id=${cat.id})}" class="btn-edit">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form th:action="@{/admin/categories/delete/{id}(id=${cat.id})}" method="post"
+                    onsubmit="return confirm('Delete this category?')">
+                <button type="submit" class="btn-delete">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>

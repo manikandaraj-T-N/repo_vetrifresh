@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+  <title>FAQ - VetriFresh</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .page-hero { background: #f4f6f0; padding: 48px 40px; text-align: center; }
+    .page-hero h1 { color: #1b4332; font-size: 32px; margin-bottom: 8px; }
+    .page-hero p { color: #666; font-size: 15px; }
+    .faq-section { max-width: 800px; margin: 48px auto; padding: 0 24px 60px; }
+    .faq-item { border: 1px solid #e0e0e0; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+    .faq-question { background: #fff; padding: 18px 20px; font-weight: 600; color: #1b4332; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-question:hover { background: #f4f6f0; }
+    .faq-answer { background: #fafafa; padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; color: #555; font-size: 14px; line-height: 1.7; }
+    .faq-answer.open { max-height: 300px; padding: 16px 20px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+    <nav>
+      <ul>
+        <li><a th:href="@{/home}">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a th:href="@{/about}">About Us</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </nav>
+     <div class="header-actions">
+   
+      <!-- wishlist -->
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i>
+    <span class="cart-badge" id="wishlistCount" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+      
+      <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+  <button class="icon-btn" title="Cart">
+    🛒
+    <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+  </button>
+</a>
+
+
+      <!-- Show login/logout based on authentication -->
+     <div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name">User</span>
+    <a th:href="@{/logout}">
+        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">
+        <button class="icon-btn" title="Account">👤</button>
+    </a>
+</div>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h1>Frequently Asked Questions</h1>
+  <p>Find answers to the most common questions about VetriFresh</p>
+</div>
+
+<div class="faq-section">
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      How do I place an order? <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="faq-answer">
+      Browse our shop, add items to your cart, and proceed to checkout. You can pay via UPI, card, or cash on delivery.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      What is the delivery time? <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="faq-answer">
+      We deliver within 24–48 hours of placing your order. Same-day delivery is available for orders placed before 10 AM.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      Are the products organic? <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="faq-answer">
+      Yes! All our products are sourced from certified organic farms. Products marked with 🌿 are 100% organic.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      Can I return or exchange a product? <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="faq-answer">
+      If you receive a damaged or incorrect product, please contact us within 24 hours. We will arrange a replacement or refund.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      How do I track my order? <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="faq-answer">
+      Log in to your account and visit Order History to track your current orders in real time.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      Is there a minimum order value? <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="faq-answer">
+      The minimum order value is ₹199. Free delivery is available on orders above ₹499.
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+<script>
+function toggleFaq(el) {
+  const answer = el.nextElementSibling;
+  answer.classList.toggle('open');
+  const icon = el.querySelector('i');
+  icon.style.transform = answer.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+</script>
+</body>
+</html>

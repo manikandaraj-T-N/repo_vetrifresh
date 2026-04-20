@@ -1,0 +1,163 @@
+/* ===== CHECKOUT FORM ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  letter-spacing: 0.3px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-dark);
+  background: var(--white);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--green-bright);
+  box-shadow: 0 0 0 3px rgba(58, 170, 71, 0.12);
+}
+
+.form-group input:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+  border-color: var(--green-mid);
+}
+
+/* ===== PAYMENT METHOD ===== */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.payment-option:hover {
+  border-color: var(--green-bright);
+  background: var(--green-light);
+}
+
+.payment-option input[type="radio"] {
+  accent-color: var(--green-bright);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.payment-option input[type="radio"]:checked + span {
+  color: var(--green-deep);
+  font-weight: 600;
+}
+
+.payment-option:has(input:checked) {
+  border-color: var(--green-bright);
+  background: var(--green-light);
+}
+
+.payment-option span {
+  font-size: 14px;
+  color: var(--text-dark);
+  transition: color var(--transition);
+}
+
+/* ===== SECTION HEADING ===== */
+.checkout-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 24px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkout-section-title i {
+  color: var(--green-bright);
+  font-size: 16px;
+}
+
+/* ===== SUBMIT BUTTON ===== */
+.btn-checkout {
+  width: 100%;
+  background: var(--green-bright);
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: background var(--transition), transform var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-checkout:hover {
+  background: var(--green-deep);
+  transform: translateY(-1px);
+}
+
+.btn-checkout:active {
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full-width {
+    grid-column: 1;
+  }
+}

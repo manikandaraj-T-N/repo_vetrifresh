@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us – VetriFresh</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+  
+  <link rel="stylesheet" th:href="@{/css/testimonial.css}"/>
+  <link rel="stylesheet" th:href="@{/css/newsletter.css}"/>
+  
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/about.css}"/>
+
+<!-- Owl Carousel CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+
+<!-- jQuery (required) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Owl Carousel JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+
+</head>
+<body>
+
+    <header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+   <div class="header-search">
+  <form th:action="@{/search}" method="get" style="display:flex;align-items:center;width:100%">
+    <span class="search-icon">🔍</span>
+    <input type="text" name="q"
+           placeholder="Search fresh vegetables, fruits…"
+           th:value="${param.q}"/>
+    <button type="submit" style="background:green;border:none;cursor:pointer; padding: 10px 15px; border-radius: 10px; color:white">&#10230;</button>
+  </form>
+</div>
+    <nav>
+      <ul>
+        <li><a th:href="@{/home}">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a th:href="@{/about}" class="nav-active">About Us</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+   
+      <!-- wishlist -->
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i>
+    <span class="cart-badge" id="wishlistCount" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+      
+      <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+  <button class="icon-btn" title="Cart">
+    🛒
+    <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+  </button>
+</a>
+
+
+      <!-- Show login/logout based on authentication -->
+     <div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name">User</span>
+    <a th:href="@{/logout}">
+        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">
+        <button class="icon-btn" title="Account">👤</button>
+    </a>
+</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Breadcrumb ── -->
+<div class="breadcrumb">
+  <a th:href="@{/home}"><i class="fas fa-home"></i></a>
+  <span class="sep">›</span>
+  <span>About Us</span>
+</div>
+
+<div class="about-wrapper">
+
+  <!-- ══ SECTION 1: Hero ══ -->
+  <section class="about-hero">
+    <div class="hero-text">
+      <h1>100% Trusted<br/>Organic Food Store</h1>
+      <p>VetriFresh is a trusted organic food store delivering fresh, high-quality
+         groceries straight from farm to home. We focus on quality, freshness, and
+         convenience, making healthy living simple and accessible for everyone.</p>
+    </div>
+    <div class="hero-img">
+      <img src="/images/About Image us 1.png" alt="Farmer holding fresh vegetables"/>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 2: Features ══ -->
+  <section class="about-features">
+    <div class="feat-img">
+      <img src="/images/About Image 2.png" alt="Tamil farmer with fresh greens"/>
+    </div>
+    <div class="feat-content">
+      <h2>100% Trusted<br/>Organic Food Store</h2>
+      <p>We partner directly with local farmers across Tamil Nadu to bring you
+         the freshest produce — no middlemen, no compromise on quality.</p>
+      <div class="feat-grid">
+        <div class="feat-item">
+          <div class="feat-icon"><i class="fas fa-leaf"></i></div>
+          <div>
+            <h4>100% Organic food</h4>
+            <p>100% healthy &amp; fresh food.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon"><i class="fas fa-headset"></i></div>
+          <div>
+            <h4>Great Support 24/7</h4>
+            <p>Instant access to Contact</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon"><i class="fas fa-star"></i></div>
+          <div>
+            <h4>Customer Feedback</h4>
+            <p>Our happy customers</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
+          <div>
+            <h4>100% Secure Payment</h4>
+            <p>We ensure your money is safe</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon"><i class="fas fa-truck"></i></div>
+          <div>
+            <h4>Free Shipping</h4>
+            <p>Free shipping with discount</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon"><i class="fas fa-seedling"></i></div>
+          <div>
+            <h4>100% Organic Food</h4>
+            <p>100% healthy &amp; fresh food.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 3: Delivery ══ -->
+  <section class="about-delivery">
+    <div class="del-text">
+      <h2>We Delivered, You<br/>Enjoy Your Order.</h2>
+      <p>At VetriFresh, we ensure quick and safe delivery of your groceries right
+         to your doorstep. With efficient logistics and careful handling, every order
+         reaches you fresh, secure, and on time — making your shopping experience
+         smooth and reliable every time.</p>
+      <ul class="checklist">
+        <li><i class="fas fa-check-circle"></i> Same-day delivery on orders before 12 PM.</li>
+        <li><i class="fas fa-check-circle"></i> Free delivery on all orders above ₹500.</li>
+        <li><i class="fas fa-check-circle"></i> Real-time order tracking at your fingertips.</li>
+      </ul>
+      <a th:href="@{/shop}" class="btn-shop-now">Shop Now <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="del-img">
+      <img src="/images/About3.png" alt="Delivery person with groceries"/>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══ SECTION 4: Team (full width) ══ -->
+<section class="about-team">
+  <div class="about-wrapper">
+    <div class="team-header">
+      <h2>Our Awesome Team</h2>
+      <p>Our Vetri Team works with passion and care to bring you fresh products,
+         fast delivery, and a smooth shopping experience every day.</p>
+    </div>
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-img">
+          <img src="/images/Team Image 1.png" alt="Jenny Wilson"/>
+          <div class="team-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>Jenny Wilson</h4>
+          <p>CEO &amp; Founder</p>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-img">
+          <img src="/images/Team Image 2.png" alt="Jane Cooper"/>
+          <div class="team-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>Jane Cooper</h4>
+          <p>Worker</p>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-img">
+          <img src="/images/Team Image 3.png" alt="Cody Fisher"/>
+          <div class="team-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>Cody Fisher</h4>
+          <p>Security Guard</p>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-img">
+          <img src="/images/Team Image 4.png" alt="Robert Fox"/>
+          <div class="team-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>Robert Fox</h4>
+          <p>Senior Farmer Manager</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ===========================================testinomial================================================ -->
+<section class="testimonial-section">
+  <h2>Client Testimonials</h2>
+
+  <div class="owl-carousel testimonial-carousel">
+
+    <!-- Card 1 -->
+    <div class="testimonial-card">
+      <div class="quote">“</div>
+      <p>
+        I used to forget half my groceries every week, but now Vetri Fresh
+        just suggests everything I need. It literally saves me time and mental effort.
+      </p>
+
+      <div class="user">
+        <img th:src="@{/images/user1.jpg}" alt="Ananth">
+        <div>
+          <h4>Ananth</h4>
+          <span>Customer</span>
+        </div>
+      </div>
+
+      <div class="stars">
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="testimonial-card">
+      <div class="quote">“</div>
+      <p>
+        The freshness score feature is something I’ve never seen before.
+        I know exactly where my vegetables come from and how fresh they are.
+      </p>
+
+      <div class="user">
+         <img th:src="@{/images/user2.jpg}" alt="Krishna Kumar">
+        <div>
+          <h4>Krishna Kumar</h4>
+          <span>Customer</span>
+        </div>
+      </div>
+
+     <div class="stars">
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="testimonial-card">
+      <div class="quote">“</div>
+      <p>
+        The app feels super smooth and clean. With AI recommendations,
+        I don’t even need to search much anymore.
+      </p>
+
+      <div class="user">
+        <img th:src="@{/images/user3.jpg}" alt="Suresh">
+        <div>
+          <h4>Suresh</h4>
+          <span>Customer</span>
+        </div>
+      </div>
+
+    <div class="stars">
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+  <i class="fa-solid fa-star"></i>
+</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===============================NEWSLETTER===================================================== -->
+ 
+  <section class="newsletter">
+    <div class="newsletter-box">
+      <div>
+        <div class="section-tag">Stay Fresh</div>
+        <h2 class="newsletter-title"
+            th:text="${newsletterTitle} ?: 'Get the Freshest Deals, Straight to Your Inbox'">
+          Get the Freshest Deals, Straight to Your Inbox
+        </h2>
+        <p class="newsletter-sub"
+           th:text="${newsletterSub} ?: 'Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.'">
+          Join 12,000+ subscribers and get weekly offers, seasonal tips &amp; organic recipes.
+        </p>
+      </div>
+      <div>
+        <!-- POST to /newsletter/subscribe -->
+        <form th:action="@{/newsletter/subscribe}" method="post" class="newsletter-form">
+          <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <input type="email" name="email" placeholder="Enter your email address…" required/>
+          <button type="submit" class="btn-primary" style="padding:14px 24px;border-radius:50px">Subscribe</button>
+        </form>
+        <!-- Success / Error messages -->
+        <p th:if="${newsletterSuccess}" style="color:#7fff8a;font-size:13px;margin-top:8px"
+           th:text="${newsletterSuccess}">Subscribed!</p>
+        <p th:if="${newsletterError}" style="color:#ff6b6b;font-size:13px;margin-top:8px"
+           th:text="${newsletterError}">Error.</p>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:10px">🔒 No spam, ever. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+<!-- ==================================FOOTER============================ -->
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+
+
+<th:block>
+
+  <script>
+  $(document).ready(function(){
+    $(".testimonial-carousel").owlCarousel({
+      loop: true,
+      margin: 20,
+      nav: true,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 3000,
+
+      navText: [
+        "<span class='arrow-left'>&larr;</span>",
+        "<span class='arrow-right'>&rarr;</span>"
+      ],
+
+      responsive:{
+        0:{ items:1 },
+        768:{ items:2 },
+        1000:{ items:3 }
+      }
+    });
+  });
+
+</script>
+
+</th:block>
+
+</body>
+</html>

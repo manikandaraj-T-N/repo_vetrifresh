@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Vetrifresh</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+
+  <!-- admin page -->
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">🌿 VetriFresh</div>
+    <nav>
+      <a th:href="@{/admin/dashboard}" class="active"><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categories</a>
+      <a th:href="@{/admin/orders}"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/blogs}"><i class="fas fa-newspaper"></i> Blogs</a>
+      <a th:href="@{/home}"><i class="fas fa-eye"></i> View Site</a>
+      <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <h1 class="admin-page-title">Dashboard</h1>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <i class="fas fa-box"></i>
+        <div>
+          <div class="stat-num" th:text="${totalProducts}">0</div>
+          <div class="stat-label">Total Products</div>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <i class="fas fa-star"></i>
+        <div>
+          <div class="stat-num" th:text="${featuredCount}">0</div>
+          <div class="stat-label">Popular Products</div>
+        </div>
+      </div>
+      <div class="stat-card orange">
+        <i class="fas fa-tags"></i>
+        <div>
+          <div class="stat-num" th:text="${totalCategories}">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+      <div class="stat-card red">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+          <div class="stat-num" th:text="${lowStockCount}">0</div>
+          <div class="stat-label">Low Stock</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Products Table -->
+    <div class="admin-card">
+      <h3>Recently Added Products</h3>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Price</th><th>Stock</th><th>Featured</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="p : ${recentProducts}">
+            <td th:text="${p.name}">-</td>
+            <td th:text="'₹' + ${p.price}">-</td>
+            <td th:text="${p.stockQuantity}">-</td>
+            <td>
+              <span th:if="${p.isFeatured}"  class="badge-yes">✅ Yes</span>
+              <span th:unless="${p.isFeatured}" class="badge-no">No</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

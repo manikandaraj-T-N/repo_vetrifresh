@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment — VetriFresh</title>
+  <link rel="stylesheet" th:href="@{/css/home.css}"/>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<div style="text-align:center; padding:80px 20px;">
+  <div style="font-size:48px; margin-bottom:16px;">💳</div>
+  <h2 style="color:#1b4332; margin-bottom:8px;">Complete Your Payment</h2>
+  <p style="color:#888; margin-bottom:32px;">
+    Order <strong th:text="${order.orderNumber}">—</strong> |
+    Amount: <strong th:text="'₹' + ${order.totalAmount}">—</strong>
+  </p>
+  <button id="payBtn"
+          style="background:#2d6a4f; color:#fff; padding:14px 36px;
+                 border-radius:8px; font-size:16px; font-weight:700;
+                 border:none; cursor:pointer;">
+    Pay Now
+  </button>
+</div>
+
+<form id="paymentForm" th:action="@{/payment/verify}" method="post" style="display:none;">
+  <input type="hidden" name="razorpay_order_id"   id="rzp_order_id"/>
+  <input type="hidden" name="razorpay_payment_id" id="rzp_payment_id"/>
+  <input type="hidden" name="razorpay_signature"  id="rzp_signature"/>
+  <input type="hidden" name="orderId"             th:value="${order.id}"/>
+</form>
+
+<script th:inline="javascript">
+  const options = {
+    key:         /*[[${razorpayKeyId}]]*/ '',
+    amount:      /*[[${amount}]]*/ 0,
+    currency:    'INR',
+    name:        'VetriFresh',
+    description: 'Order #' + /*[[${order.orderNumber}]]*/ '',
+    order_id:    /*[[${razorpayOrderId}]]*/ '',
+    prefill: {
+      name:    /*[[${userName}]]*/ '',
+      email:   /*[[${userEmail}]]*/ '',
+      contact: /*[[${userPhone}]]*/ ''
+    },
+    theme: { color: '#2d6a4f' },
+    handler: function(response) {
+      document.getElementById('rzp_order_id').value   = response.razorpay_order_id;
+      document.getElementById('rzp_payment_id').value = response.razorpay_payment_id;
+      document.getElementById('rzp_signature').value  = response.razorpay_signature;
+      document.getElementById('paymentForm').submit();
+    }
+  };
+
+  document.getElementById('payBtn').onclick = function() {
+    const rzp = new Razorpay(options);
+    rzp.open();
+  };
+
+  // Auto-open payment on page load
+  window.onload = function() {
+    document.getElementById('payBtn').click();
+  };
+</script>
+
+</body>
+</html>

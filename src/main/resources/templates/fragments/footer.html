@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+   
+    <body>
+<footer th:fragment="footer" class="footer">
+  <!-- FOOTER -->
+
+
+  <div class="footer__top">
+
+    <!-- About -->
+    <div class="footer__about">
+      <h3 class="footer__heading">About Vetri Fresh</h3>
+      <p class="footer__desc">
+        Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui,
+        eget bibendum magna congue nec.
+      </p>
+      <div class="footer__contact">
+        <span class="footer__contact-item">7836389098</span>
+        <span class="footer__contact-or">or</span>
+        <span class="footer__contact-item">vetrifresh@gmail.com</span>
+      </div>
+    </div>
+
+    <!-- My Account -->
+    <div class="footer__col">
+      <h3 class="footer__heading">My Account</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/profile}">My Account</a></li>
+        <li><a th:href="@{/orders}">Order History</a></li>
+        <li><a th:href="@{/cart}">Shopping Cart</a></li>
+        <li><a th:href="@{/wishlist}">Wishlist</a></li>
+        <li><a th:href="@{/profile}">Settings</a></li>
+      </ul>
+    </div>
+
+    <!-- Helps -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Helps</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/contact}">Contact</a></li>
+        <li><a th:href="@{/faq}">Faqs</a></li>
+        <li><a th:href="@{/terms}">Terms &amp; Condition</a></li>
+        <li><a th:href="@{/privacy}">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <!-- Proxy -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Proxy</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/about}">About</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/shop}">Product</a></li>
+        <li><a th:href="@{/shop}">Products Details</a></li>
+        <li><a th:href="@{/orders}">Track Order</a></li>
+      </ul>
+    </div>
+
+    <!-- Instagram -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Instagram</h3>
+      <div class="footer__insta-grid">
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&amp;q=70" alt="Instagram 1"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=100&amp;q=70" alt="Instagram 2"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=100&amp;q=70" alt="Instagram 3"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=100&amp;q=70" alt="Instagram 4"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1543168256-418811576931?w=100&amp;q=70" alt="Instagram 5"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1506617564039-2f3b650b7010?w=100&amp;q=70" alt="Instagram 6"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1490885578174-acda8905c2c6?w=100&amp;q=70" alt="Instagram 7"></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1467453678174-768ec283a940?w=100&amp;q=70" alt="Instagram 8"></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer__bottom">
+
+    <div class="footer__socials">
+      <a href="#" class="footer__social footer__social--fb">f</a>
+      <a href="#" class="footer__social">𝕏</a>
+      <a href="#" class="footer__social">𝐏</a>
+      <a href="#" class="footer__social">◎</a>
+    </div>
+
+    <p class="footer__copy">VetriFresh eCommerce © 2021. All Rights Reserved</p>
+
+    <div class="footer__payments">
+      <span class="footer__pay footer__pay--apple">Apple Pay</span>
+      <span class="footer__pay footer__pay--visa">VISA</span>
+      <span class="footer__pay footer__pay--discover">DISCOVER</span>
+      <span class="footer__pay footer__pay--mastercard">
+        <span class="mc-left"></span>
+        <span class="mc-right"></span>
+      </span>
+      <span class="footer__pay footer__pay--secure">🔒 Secure Payment</span>
+    </div>
+
+  </div>
+
+
+</footer>
+
+</body></html>

@@ -1,0 +1,286 @@
+/* ===========================
+   Vetri Fresh — Footer Styles
+   =========================== */
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- Footer Wrapper ---------- */
+.footer {
+  background-color: #0d2d0f;
+  color: #aaa;
+  font-size: 14px;
+  padding: 60px 40px 0;
+  overflow: hidden;
+}
+
+/* ---------- Top Grid ---------- */
+.footer__top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* ---------- About Column ---------- */
+.footer__about .footer__desc {
+  line-height: 1.7;
+  color: #aaa;
+  margin-bottom: 24px;
+}
+
+.footer__contact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.footer__contact-item {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  border-bottom: 2px solid #4caf50;
+  padding-bottom: 2px;
+}
+
+.footer__contact-or {
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* ---------- Column Headings ---------- */
+.footer__heading {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.footer__about .footer__heading {
+  font-size: 18px;
+}
+
+/* ---------- Nav Links ---------- */
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer__links a {
+  color: #aaa;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer__links a:hover {
+  color: #ffffff;
+}
+
+.footer__link--active {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* ---------- Instagram Grid ---------- */
+.footer__insta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.footer__insta-item {
+  aspect-ratio: 1;
+  display: block;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #1a4a1c;
+  transition: opacity 0.2s ease;
+}
+
+.footer__insta-item:hover {
+  opacity: 0.8;
+}
+
+/* ---------- Bottom Bar ---------- */
+.footer__bottom {
+  max-width: 1280px;
+  margin: 48px auto 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ---------- Social Icons ---------- */
+.footer__socials {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer__social {
+  color: #aaa;
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+.footer__social:hover {
+  color: #ffffff;
+}
+
+.footer__social--fb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.footer__social--fb:hover {
+  background-color: #43a047;
+  color: #ffffff;
+}
+
+/* ---------- Copyright ---------- */
+.footer__copy {
+  color: #888;
+  font-size: 13px;
+}
+
+/* ---------- Payment Methods ---------- */
+.footer__payments {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer__pay {
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer__pay--apple {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.footer__pay--visa {
+  background-color: #ffffff;
+  color: #1a1f71;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.footer__pay--discover {
+  background-color: #ffffff;
+  color: #e65c00;
+  letter-spacing: 0.5px;
+}
+
+.footer__pay--mastercard {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  gap: 0;
+}
+
+.mc-left,
+.mc-right {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.mc-left {
+  background-color: #eb001b;
+  margin-right: -8px;
+  position: relative;
+  z-index: 1;
+}
+
+.mc-right {
+  background-color: #f79e1b;
+}
+
+.footer__pay--secure {
+  color: #aaa;
+  font-size: 12px;
+  background: transparent;
+  padding: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .footer__top {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .footer__about {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 40px 20px 0;
+  }
+
+  .footer__top {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .footer__about {
+    grid-column: 1 / -1;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}

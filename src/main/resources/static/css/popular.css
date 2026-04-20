@@ -1,0 +1,267 @@
+/* ===================== POPULAR SECTION ===================== */
+.section.popular {
+  max-width: 1280px;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+.section-header.popular {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.section-header.popular h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.view-all {
+  color: #2ecc71;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+}
+
+.view-all:hover {
+  text-decoration: underline;
+}
+
+/* ===================== GRID ===================== */
+.products-grid.popular {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* ===================== CARD ===================== */
+.product-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px;
+  position: relative;
+  transition: 0.25s ease;
+  border: 2px solid #eeeeee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.product-card:hover {
+  border: 2px solid #2ecc71;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.12);
+  transform: translateY(-3px);
+}
+
+/* ===================== IMAGE WRAPPER ===================== */
+.product-img-wrapper.popular {
+  background: #ffffff;
+  border-radius: 12px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;       /* needed for rating badge to sit inside */
+  margin-bottom: 12px;
+}
+
+.product-img-wrapper.popular img {
+  max-height: 160px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img-wrapper.popular img {
+  transform: scale(1.05);
+}
+
+/* ===================== BADGE (Sale / New) ===================== */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 700;
+  z-index: 2;
+  letter-spacing: 0.3px;
+}
+
+.badge.sale {
+  background: #ff4d4d;
+}
+
+.badge.new {
+  background: #ff9800;
+}
+
+/* ===================== RATING BADGE ===================== */
+/* Sits in the BOTTOM-RIGHT corner of the image wrapper */
+.rating-badge.popular {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: #1b8f3a;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+
+.rating-badge.popular i {
+  color: #f4c542;
+  font-size: 12px;
+}
+
+/* ===================== PRODUCT INFO ===================== */
+.product-info.popular {
+  padding: 0 2px;
+}
+
+.product-info.popular h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===================== PRICE ROW ===================== */
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.price .current {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.price .old {
+  font-size: 13px;
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+/* ===================== STARS + CART ROW ===================== */
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+/* add this */
+.product-footer form {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===================== STARS ===================== */
+.stars {
+  color: #f4b400;
+  font-size: 14px;
+  display: flex;
+  gap: 2px;
+}
+
+.stars .far.fa-star {
+  color: #ddd;
+}
+
+/* ===================== CART BUTTON ===================== */
+.cart-btn {
+  background: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: 0.25s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cart-btn:hover {
+  background: #219150;
+  transform: scale(1.08);
+}
+
+.cart-btn i {
+  color: #fff;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+
+.wishlist-btn {
+  background: #fdecea;
+  color: #e63946;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  flex-shrink: 0;
+}
+
+.wishlist-btn:hover {
+  background: #e63946;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.wishlist-btn i {
+  color: inherit;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1024px) {
+  .products-grid.popular {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .products-grid.popular {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid.popular {
+    grid-template-columns: 1fr;
+  }
+}

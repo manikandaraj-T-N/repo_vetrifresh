@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Form - Admin</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="admin-logo"> VetriFresh</div>
+     <nav>
+      <a th:href="@{/admin/dashboard}"><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}" class="active"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categories</a>
+      <a th:href="@{/admin/orders}"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/blogs}"><i class="fas fa-newspaper"></i> Blogs</a>
+      <a th:href="@{/home}"><i class="fas fa-eye"></i> View Site</a>
+      <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <h1 class="admin-page-title"
+        th:text="${product.id != null} ? 'Edit Product' : 'Add New Product'">
+      Product Form
+    </h1>
+
+    <div class="admin-card form-card">
+      <form th:action="@{/admin/products/save}" method="post">
+
+        <!-- Hidden ID for edit -->
+        <input type="hidden" th:field="*{id}" th:object="${product}"/>
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Product Name *</label>
+            <input type="text" th:field="*{name}" th:object="${product}"
+                   placeholder="e.g. Fresh Tomatoes" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <select name="categoryId">
+              <option value="">-- Select Category --</option>
+              <option th:each="cat : ${categories}"
+                      th:value="${cat.id}"
+                      th:text="${cat.name}"
+                      th:selected="${product.category?.id == cat.id}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+      <label>Tags <small>(comma-separated, e.g. Healthy, Organic, Snacks)</small></label>
+      <input type="text" th:field="*{tags}" th:object="${product}"
+            placeholder="Healthy, Organic, Snacks"/>
+    </div>
+
+          <div class="form-group">
+            <label>Price (₹) *</label>
+            <input type="number" th:field="*{price}" th:object="${product}"
+                   step="0.01" placeholder="199.00" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Original Price (₹) <small>for Sale badge</small></label>
+            <input type="number" th:field="*{originalPrice}" th:object="${product}"
+                   step="0.01" placeholder="320.00" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Stock Quantity *</label>
+            <input type="number" th:field="*{stockQuantity}" th:object="${product}"
+                   placeholder="100" required/>
+          </div>
+
+          <div class="form-group">
+            <label>Unit</label>
+            <select th:field="*{unit}" th:object="${product}">
+              <option value="kg">kg</option>
+              <option value="piece">piece</option>
+              <option value="dozen">dozen</option>
+              <option value="litre">litre</option>
+              <option value="pack">pack</option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+              <label>Rating <small>(1.0 – 5.0)</small></label>
+              <input type="number" 
+                    th:field="*{rating}" 
+                    th:object="${product}"
+                    step="0.1" 
+                    min="1" 
+                    max="5" 
+                    placeholder="e.g. 4.5" required/>
+                      </div>
+
+          <div class="form-group full-width">
+            <label>Image URL</label>
+            <input type="text" th:field="*{imageUrl}" th:object="${product}"
+                   placeholder="https://... or /images/product.png" required/>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Description</label>
+            <textarea th:field="*{description}" th:object="${product}"
+                      rows="3" placeholder="Product description..." required></textarea>
+          </div>
+
+          <!-- Checkboxes -->
+          <div class="form-group checkboxes full-width">
+            <label class="checkbox-label">
+              <input type="checkbox" name="isFeatured"
+                     th:checked="${product.isFeatured}"/>
+              ⭐ Mark as Popular Product (shows on home page)
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isOrganic"
+                     th:checked="${product.isOrganic}"/>
+              🌿 Organic
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="isActive"
+                     th:checked="${product.isActive == null or product.isActive}"/>
+              ✅ Active (visible on site)
+            </label>
+          </div>
+
+          
+
+        </div>
+
+        <div class="form-actions">
+          <a th:href="@{/admin/products}" class="btn-cancel">Cancel</a>
+          <button type="submit" class="btn-save">
+            <i class="fas fa-save"></i>
+            <span th:text="${product.id != null} ? 'Update Product' : 'Save Product'">Save</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+</div>
+</body>
+</html>

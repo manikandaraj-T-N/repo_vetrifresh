@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - Admin</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="admin-logo">🌿 VetriFresh</div>
+     <nav>
+      <a th:href="@{/admin/dashboard}" class="active"><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categories</a>
+      <a th:href="@{/admin/orders}" class="active"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/blogs}">  <i class="fas fa-newspaper"></i> Blogs</a>
+      <a th:href="@{/home}">  <i class="fas fa-eye"></i> View Site</a>
+      <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-page-title">Products</h1>
+      <a th:href="@{/admin/products/new}" class="btn-add">
+        <i class="fas fa-plus"></i> Add Product
+      </a>
+    </div>
+
+    <div class="admin-card">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Image</th><th>Name</th><th>Price</th>
+            <th>Stock</th><th>Category</th>
+            <th>Featured</th><th>Active</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="p : ${products}">
+            <td>
+              <img alt="product image" th:src="${p.imageUrl}" style="width:50px;height:50px;object-fit:contain;"/>
+            </td>
+            <td th:text="${p.name}">-</td>
+            <td th:text="'₹' + ${p.price}">-</td>
+            <td th:text="${p.stockQuantity}">-</td>
+            <td th:text="${p.category?.name} ?: '-'">-</td>
+            <td>
+              <!-- Toggle Featured Button -->
+              <form th:action="@{/admin/products/toggle-featured/{id}(id=${p.id})}" method="post">
+                <button type="submit"
+                        th:class="${p.isFeatured} ? 'badge-yes btn-toggle' : 'badge-no btn-toggle'">
+                  <span th:text="${p.isFeatured} ? '⭐ Yes' : 'No'">No</span>
+                </button>
+              </form>
+            </td>
+            <td>
+              <span th:if="${p.isActive}"  class="badge-yes">Active</span>
+              <span th:unless="${p.isActive}" class="badge-no">Inactive</span>
+            </td>
+            <td class="action-btns">
+              <a th:href="@{/admin/products/edit/{id}(id=${p.id})}" class="btn-edit">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form th:action="@{/admin/products/delete/{id}(id=${p.id})}" method="post"
+                    onsubmit="return confirm('Delete this product?')">
+                <button type="submit" class="btn-delete">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>
