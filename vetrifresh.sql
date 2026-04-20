@@ -3,9 +3,11 @@ use vetrifresh;
 show tables;
 
 select * from users;
+select * from products;
 select * from categories;
 select * from cart_items;
 select * from wishlists;
+select * from blogs;
 
 TRUNCATE TABLE categories;
 TRUNCATE TABLE wishlists;
