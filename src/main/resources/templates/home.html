@@ -14,13 +14,12 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-
+   <link rel="stylesheet" th:href="@{/css/promo.css}"/>
    <link rel="stylesheet" th:href="@{/css/popular.css}"/>
     <link rel="stylesheet" th:href="@{/css/latestnews.css}"/>
    <link rel="stylesheet" th:href="@{/css/followinsta.css}"/>
    <link rel="stylesheet" th:href="@{/css/testimonial.css}"/>
    <link rel="stylesheet" th:href="@{/css/newsletter.css}"/>
-   <!-- <link rel="stylesheet" th:href="@{/css/newsletter.css}"/> -->
    <link rel="stylesheet" th:href="@{/css/cartdrawer.css}"/>
    
 
@@ -90,7 +89,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 
       <!-- Show login/logout based on authentication -->
-     <div sec:authorize="isAuthenticated()">
+     <!-- <div sec:authorize="isAuthenticated()">
     <span sec:authentication="name">User</span>
     <a th:href="@{/logout}">
         <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
@@ -100,15 +99,91 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
     <a th:href="@{/login}">
         <button class="icon-btn" title="Account">👤</button>
     </a>
+</div> -->
+
+
+<!-- ===== USER MENU ===== -->
+<div class="user-menu-wrap">
+
+  <!-- LOGGED IN -->
+  <div sec:authorize="isAuthenticated()" class="user-menu">
+    <button class="avatar-btn" onclick="toggleUserMenu(event)" title="Account menu">
+      <img th:src="${currentUser?.profileImage != null ? currentUser.profileImage : '/images/profiles/default-avatar.jpg'}"
+           onerror="this.src='/images/profiles/default-avatar.jpg'"
+           class="avatar-img" alt="Profile"/>
+      <span class="avatar-online-dot"></span>
+    </button>
+
+    <div class="user-dropdown" id="userDropdown">
+      <!-- User info header -->
+      <div class="dropdown-header">
+        <img th:src="${currentUser?.profileImage != null ? currentUser.profileImage : '/images/profiles/default-avatar.jpg'}"
+             onerror="this.src='/images/profiles/default-avatar.jpg'"
+             class="dropdown-avatar" alt="Profile"/>
+        <div class="dropdown-user-info">
+          <span class="dropdown-name" sec:authentication="name">User</span>
+          <span class="dropdown-role">Member</span>
+        </div>
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <a th:href="@{/profile}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-user-circle"></i></span>
+        <span>My Profile</span>
+      </a>
+      <a th:href="@{/orders}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-box-open"></i></span>
+        <span>My Orders</span>
+      </a>
+      <a th:href="@{/wishlist}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-heart"></i></span>
+        <span>Wishlist</span>
+      </a>
+      <a th:href="@{/cart}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-shopping-cart"></i></span>
+        <span>My Cart</span>
+      </a>
+
+      <!-- Admin link — only visible to ADMIN role -->
+      <div sec:authorize="hasRole('ADMIN')">
+        <div class="dropdown-divider"></div>
+        <a th:href="@{/admin/dashboard}" class="dropdown-item dropdown-item-admin">
+          <span class="di-icon"><i class="fas fa-shield-alt"></i></span>
+          <span>Admin Panel</span>
+        </a>
+
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <a th:href="@{/logout}" class="dropdown-item dropdown-item-logout">
+        <span class="di-icon"><i class="fas fa-sign-out-alt"></i></span>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- NOT LOGGED IN -->
+  <div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}" class="login-pill">
+      <i class="fas fa-user"></i>
+      <span>Login</span>
+    </a>
+  </div>
+
 </div>
+
+
+
     </div>
   </div>
 </header>
 
-<!-- MAIN CONTENT -->
+<!--=============== MAIN CONTENT ==-->
 <main id="mainContent">
 
-  <!-- HERO -->
+  <!--============= HERO ===========================-->
   <section class="hero">
     <div class="hero-main fade-in-up">
       <div class="hero-badge"><span class="dot"></span>
@@ -156,7 +231,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
     </div>
   </section>
 
-  <!-- FEATURES -->
+  <!--========== ====FEATURES============== -->
  <div class="features-row">
   <th:block th:if="${features != null and !features.isEmpty()}">
     <div class="feature-item" th:each="feature : ${features}">
@@ -191,7 +266,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 </div>
 
   <!-- =============================CATEGORIES =====================-->
-<section class="section" id="categoriesSection">
+<!-- <section class="section" id="categoriesSection">
   <div class="section-header">
     <div>
       <div class="section-tag">Browse by Category</div>
@@ -202,7 +277,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
   <div class="categories-grid" id="categoriesGrid">
 
-    <!-- Always show static fallback cards -->
+    
     <a class="category-card" href="/shop?category=fresh-fruit">
       <div class="cat-img-wrapper">
         <img src="/images/bag.jpg" alt="Fresh Fruit" class="cat-img"/>
@@ -276,7 +351,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
       <div class="cat-name">Oil</div>
     </a>
 
-    <!-- ALSO show DB categories from admin (appended after static) -->
+   
     <th:block th:if="${categories != null and !categories.isEmpty()}">
       <a class="category-card"
          th:each="category : ${categories}"
@@ -291,59 +366,87 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
     </th:block>
 
   </div>
-</section>
-  <!-- ===============================FEATURED PRODUCTS=============================== -->
-  <!-- <section class="section" id="productsSection">
-    <div class="section-header">
-      <div>
-        <div class="section-tag" id="productsTag"
-             th:text="${productsTag} ?: 'Featured Products'">Featured Products</div>
-        <h2 class="section-title" id="productsTitle"
-            th:text="${productsTitle} ?: 'Fresh Picks of the Week'">Fresh Picks of the Week</h2>
-      </div>
-      <a th:href="@{/shop}" class="see-all">View All →</a>
+</section> -->
+  
+<section class="section" id="categoriesSection">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Browse by Category</div>
+      <h2 class="section-title">What Are You Looking For?</h2>
     </div>
- 
-    <div class="products-grid" id="productsGrid"
-         th:if="${products != null and !products.isEmpty()}">
-      <div class="product-card" th:each="product : ${products}">
-        <div class="product-img-wrap">
-          <img th:if="${product.imageUrl != null}"
-               th:src="@{${product.imageUrl}}"
-               th:alt="${product.name}"
-                class="product-img"/>
-   
-<span th:unless="${product.imageUrl != null}"
-      class="product-emoji"></span>
+    <a th:href="@{/shop}" class="see-all">View All →</a>
+  </div>
 
-
-          <span class="product-badge" th:if="${product.discountPercentage != null}"
-      th:text="${product.discountPercentage + '% OFF'}">Sale</span>
-        </div>
-
-        <div class="product-info">
-          <div class="product-category" th:text="${product.category != null} ? ${product.category.name} : ''">Vegetables</div>
-          <div class="product-name" th:text="${product.name}">Product Name</div>
-          <div class="product-weight" th:text="${product.unit}">500g</div>
-          <div class="product-price-row">
-            <span class="product-price" th:text="'₹' + ${product.price}">₹0</span>
-            <span class="product-original"
-                  th:if="${product.originalPrice != null}"
-                  th:text="'₹' + ${product.originalPrice}">₹0</span>
-          </div>
-          <button class="add-to-cart-btn"
-                  th:data-product-id="${product.id}"
-                  th:data-product-name="${product.name}"
-                  th:data-product-price="${product.price}"
-                  th:onclick="'addToCart(' + ${product.id} + ', \'' + ${product.name} + '\', ' + ${product.price} + ')'">
-            Add to Cart
-          </button>
-        </div>
+  <div class="categories-grid" id="categoriesGrid">
+    <a class="category-card"
+       th:each="category : ${categories}"
+       th:href="@{/shop(category=${category.slug})}">
+      <div class="cat-img-wrapper">
+        <img th:src="${category.imageUrl}"
+             th:alt="${category.name}"
+             class="cat-img"/>
       </div>
-    </div> 
+      <div class="cat-name" th:text="${category.name}">Category</div>
+    </a>
+  </div>
+</section>
 
-    
-  </section> -->
+<!--=========================== PROMO BANNER SECTION=========================== -->
+<section class="promo-section">
+
+  <!-- Card 1: Sale of the Month -->
+  <div class="promo-card card-1">
+    <img class="card-img-bottom" src="/images/Realted pro Bannar.png" alt="vegetables"/>
+    <div class="overlay">
+      <div class="tag anim">Best Deals</div>
+      <div class="title anim">Sale of the<br>Month</div>
+      <div class="countdown anim">
+        <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-label">Days</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="cd-num" id="cd-hours">02</div><div class="cd-label">Hours</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="cd-num" id="cd-mins">18</div><div class="cd-label">Mins</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="cd-num" id="cd-secs">46</div><div class="cd-label">Secs</div></div>
+      </div>
+      <button class="shop-btn anim" onclick="window.location='/shop'">
+        <span>Shop now</span><span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Card 2: Low-Fat Meat -->
+  <div class="promo-card card-2">
+    <img class="card-img-bottom" src="/images/Related pro Bannar1.png" alt="meat"/>
+    <div class="overlay">
+      <div class="tag anim">85% Fat Free</div>
+      <div class="title anim">Low-Fat Meat</div>
+      <div class="subtitle anim">
+        Started at <span class="price">₹79.99</span>
+      </div>
+      <button class="shop-btn anim" onclick="window.location='/shop'">
+        <span>Shop now</span><span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Card 3: Fresh Fruit -->
+  <div class="promo-card card-3">
+    <img class="card-img-bottom" src="/images/realted pro Bannar3.png" alt="fruits"/>
+    <div class="overlay">
+      <div class="tag anim">Summer Sale</div>
+      <div class="title anim">100% Fresh Fruit</div>
+      <div class="anim">
+        <span class="up-to">Up to</span>
+        <span class="off-badge">64% OFF</span>
+      </div>
+      <button class="shop-btn anim" onclick="window.location='/shop'">
+        <span>Shop now</span><span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+</section>
 
   <!--============================= SALE BANNER============== -->
   <div class="banner-strip">
@@ -390,7 +493,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
       <!-- Image wrapper -->
       <div class="product-img-wrapper popular">
-        <img th:src="${product.imageUrl} ?: '/images/placeholder.jpg'"
+        <img alt="product-image" th:src="${product.imageUrl} ?: '/images/placeholder.jpg'"
              th:alt="${product.name} ?: 'Product'" />
 
         <!-- Rating badge inside image wrapper -->
@@ -474,55 +577,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 
 
 <!--==================================== Latest Post News ====================-->
-<!-- 
-<div class="news-section">
-
-
-  <h2 class="news-title">Latest News</h2>
-
-
-  <div class="news-grid">
-
-    <div class="news-card" th:each="post : ${posts}">
-
-   
-      <div class="news-img-wrapper">
-        <img th:src="${post.imageUrl}" alt="news"/>
-
-   
-        <div class="date-badge">
-          <span th:text="${#dates.format(post.date, 'dd')}">18</span>
-          <small th:text="${#dates.format(post.date, 'MMM').toUpperCase()}">NOV</small>
-        </div>
-      </div>
-
-
-      <div class="news-content">
-
-   
-        <div class="news-meta">
-          <span>📌 Food</span>
-          <span>👤 By Admin</span>
-          <span>💬 65 Comments</span>
-        </div>
-
-
-        <h3 th:text="${post.title}">
-          Benefits Of orange Juice for Skin and health
-        </h3>
-
-     
-        <a th:href="@{/blog/{id}(id=${post.id})}" class="read-more">
-          Read More →
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div> -->
 
 <div class="news-section">
 
@@ -950,6 +1004,71 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
       }
     });
   });
+</script>
+
+<script>
+// ── Remove animation class initially ──────────────────────
+document.querySelectorAll('.anim').forEach(el => {
+  el.style.opacity = '0';
+  el.style.animationPlayState = 'paused';
+});
+
+// ── Trigger when section enters viewport ──────────────────
+const promoSection = document.querySelector('.promo-section');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Start all animations
+      document.querySelectorAll('.anim').forEach(el => {
+        el.style.animationPlayState = 'running';
+        el.style.opacity = '';
+      });
+      observer.disconnect(); 
+    }
+  });
+}, {
+  threshold: 0.3 // triggers when 30% of section is visible
+});
+
+observer.observe(promoSection);
+  // Countdown Timer
+function pad(n) { return String(n).padStart(2, '0'); }
+var end = new Date().getTime() + (72 * 3600 + 18 * 60 + 46) * 1000;
+
+function tick() {
+  var diff = Math.max(0, end - new Date().getTime());
+  document.getElementById('cd-days').textContent  = pad(Math.floor(diff / 86400000));
+  document.getElementById('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+  document.getElementById('cd-mins').textContent  = pad(Math.floor((diff % 3600000) / 60000));
+  document.getElementById('cd-secs').textContent  = pad(Math.floor((diff % 60000) / 1000));
+}
+tick();
+setInterval(tick, 1000);
+</script>
+
+<script>
+
+function toggleUserMenu(e) {
+  e.stopPropagation();
+  document.getElementById('userDropdown').classList.toggle('open');
+}
+
+// Close on outside click
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('userDropdown');
+  if (dropdown && !e.target.closest('.user-menu')) {
+    dropdown.classList.remove('open');
+  }
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.remove('open');
+  }
+});
 </script>
 
 </th:block>

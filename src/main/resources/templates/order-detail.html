@@ -6,9 +6,142 @@
   <title>Order Detail — VetriFresh</title>
   <link rel="stylesheet" th:href="@{/css/home.css}"/>
   <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+   <link rel="stylesheet" th:href="@{/css/footer.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
+
+  <!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-name">Vetri<span>Fresh</span></div>
+      <div class="logo-tag">Pure · Organic · Fresh</div>
+    </div>
+   <div class="header-search">
+  <form th:action="@{/search}" method="get" style="display:flex;align-items:center;width:100%">
+    <span class="search-icon">🔍</span>
+    <input type="text" name="q"
+           placeholder="Search fresh vegetables, fruits…"
+           th:value="${param.q}"/>
+    <button type="submit" style="background:green;border:none;cursor:pointer; padding: 10px 15px; border-radius: 10px; color:white">&#10230;</button>
+  </form>
+</div>
+    <nav>
+      <ul>
+        <li><a th:href="@{/home}" class="nav-active">Home</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/blog}">Blog</a></li>
+        <li><a th:href="@{/about}">About Us</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+   
+      <!-- wishlist -->
+      <a th:href="@{/wishlist}" style="text-decoration:none;">
+  <button class="icon-btn" title="Wishlist">
+    <i class="far fa-heart"></i>
+    <span class="cart-badge" id="wishlistCount" th:text="${wishlistCount} ?: '0'">0</span>
+  </button>
+  </a>
+      
+      <a th:href="@{/cart}" style="position:relative; text-decoration:none;">
+  <button class="icon-btn" title="Cart">
+    🛒
+    <span class="cart-badge" id="cartCount" th:text="${cartCount} ?: '0'">0</span>
+  </button>
+</a>
+
+
+      <!-- Show login/logout based on authentication -->
+     <!-- <div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name">User</span>
+    <a th:href="@{/logout}">
+        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </a>
+</div>
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">
+        <button class="icon-btn" title="Account">👤</button>
+    </a>
+</div> -->
+
+
+<!-- ===== USER MENU ===== -->
+<div class="user-menu-wrap">
+
+  <!-- LOGGED IN -->
+  <div sec:authorize="isAuthenticated()" class="user-menu">
+    <button class="avatar-btn" onclick="toggleUserMenu(event)" title="Account menu">
+      <img th:src="${currentUser?.profileImage != null ? currentUser.profileImage : '/images/profiles/default-avatar.jpg'}"
+           onerror="this.src='/images/profiles/default-avatar.jpg'"
+           class="avatar-img" alt="Profile"/>
+      <span class="avatar-online-dot"></span>
+    </button>
+
+    <div class="user-dropdown" id="userDropdown">
+      <!-- User info header -->
+      <div class="dropdown-header">
+        <img th:src="${currentUser?.profileImage != null ? currentUser.profileImage : '/images/profiles/default-avatar.jpg'}"
+             onerror="this.src='/images/profiles/default-avatar.jpg'"
+             class="dropdown-avatar" alt="Profile"/>
+        <div class="dropdown-user-info">
+          <span class="dropdown-name" sec:authentication="name">User</span>
+          <span class="dropdown-role">Member</span>
+        </div>
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <a th:href="@{/profile}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-user-circle"></i></span>
+        <span>My Profile</span>
+      </a>
+      <a th:href="@{/orders}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-box-open"></i></span>
+        <span>My Orders</span>
+      </a>
+      <a th:href="@{/wishlist}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-heart"></i></span>
+        <span>Wishlist</span>
+      </a>
+      <a th:href="@{/cart}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-shopping-cart"></i></span>
+        <span>My Cart</span>
+      </a>
+
+      <!-- Admin link — only visible to ADMIN role -->
+      <div sec:authorize="hasRole('ADMIN')">
+        <div class="dropdown-divider"></div>
+        <a th:href="@{/admin/dashboard}" class="dropdown-item dropdown-item-admin">
+          <span class="di-icon"><i class="fas fa-shield-alt"></i></span>
+          <span>Admin Panel</span>
+        </a>
+
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <a th:href="@{/logout}" class="dropdown-item dropdown-item-logout">
+        <span class="di-icon"><i class="fas fa-sign-out-alt"></i></span>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- NOT LOGGED IN -->
+  <div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}" class="login-pill">
+      <i class="fas fa-user"></i>
+      <span>Login</span>
+    </a>
+  </div>
+
+</div>
+    </div>
+  </div>
+</header>
 
 <div class="cart-page">
 
@@ -100,5 +233,127 @@
 .badge-pending { background:#fff3cd; color:#856404; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; }
 </style>
 
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer__top">
+
+    <!-- About -->
+    <div class="footer__about">
+      <h3 class="footer__heading">About Vetri Fresh</h3>
+      <p class="footer__desc">
+        Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui,
+        eget bibendum magna congue nec.
+      </p>
+      <div class="footer__contact">
+        <span class="footer__contact-item">7836389098</span>
+        <span class="footer__contact-or">or</span>
+        <span class="footer__contact-item">vetrifresh@gmail.com</span>
+      </div>
+    </div>
+
+    <!-- My Account -->
+    <div class="footer__col">
+      <h3 class="footer__heading">My Account</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/profile}">My Account</a></li>
+        <li><a th:href="@{/orders}">Order History</a></li>
+        <li><a th:href="@{/cart}">Shopping Cart</a></li>
+        <li><a th:href="@{/wishlist}">Wishlist</a></li>
+        <li><a th:href="@{/profile}">Settings</a></li>
+      </ul>
+    </div>
+
+    <!-- Helps -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Helps</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/contact}">Contact</a></li>
+        <li><a th:href="@{/faq}">Faqs</a></li>
+        <li><a th:href="@{/terms}">Terms &amp; Condition</a></li>
+        <li><a th:href="@{/privacy}">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <!-- Proxy -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Proxy</h3>
+      <ul class="footer__links">
+        <li><a th:href="@{/about}">About</a></li>
+        <li><a th:href="@{/shop}">Shop</a></li>
+        <li><a th:href="@{/shop}">Product</a></li>
+        <li><a th:href="@{/shop}">Products Details</a></li>
+        <li><a th:href="@{/orders}">Track Order</a></li>
+      </ul>
+    </div>
+
+    <!-- Instagram -->
+    <div class="footer__col">
+      <h3 class="footer__heading">Instagram</h3>
+      <div class="footer__insta-grid">
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&q=70" alt="Instagram 1" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=100&q=70" alt="Instagram 2" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=100&q=70" alt="Instagram 3" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=100&q=70" alt="Instagram 4" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1543168256-418811576931?w=100&q=70" alt="Instagram 5" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1506617564039-2f3b650b7010?w=100&q=70" alt="Instagram 6" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1490885578174-acda8905c2c6?w=100&q=70" alt="Instagram 7" /></a>
+        <a href="#" class="footer__insta-item"><img src="https://images.unsplash.com/photo-1467453678174-768ec283a940?w=100&q=70" alt="Instagram 8" /></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer__bottom">
+
+    <div class="footer__socials">
+      <a href="#" class="footer__social footer__social--fb">f</a>
+      <a href="#" class="footer__social">𝕏</a>
+      <a href="#" class="footer__social">𝐏</a>
+      <a href="#" class="footer__social">◎</a>
+    </div>
+
+    <p class="footer__copy">VetriFresh eCommerce &copy; 2021. All Rights Reserved</p>
+
+    <div class="footer__payments">
+      <span class="footer__pay footer__pay--apple">Apple Pay</span>
+      <span class="footer__pay footer__pay--visa">VISA</span>
+      <span class="footer__pay footer__pay--discover">DISCOVER</span>
+      <span class="footer__pay footer__pay--mastercard">
+        <span class="mc-left"></span>
+        <span class="mc-right"></span>
+      </span>
+      <span class="footer__pay footer__pay--secure">🔒 Secure Payment</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<script>
+
+function toggleUserMenu(e) {
+  e.stopPropagation();
+  document.getElementById('userDropdown').classList.toggle('open');
+}
+
+// Close on outside click
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('userDropdown');
+  if (dropdown && !e.target.closest('.user-menu')) {
+    dropdown.classList.remove('open');
+  }
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.remove('open');
+  }
+});
+</script>
 </body>
 </html>

@@ -1,8 +1,7 @@
 package com.vetrifresh.controller;
 
-import java.util.List;
-import java.util.Objects;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +10,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.vetrifresh.model.Blog;
 import com.vetrifresh.model.Category;
 import com.vetrifresh.model.Product;
+import com.vetrifresh.model.User;
 import com.vetrifresh.repository.BlogRepository;
 import com.vetrifresh.repository.CategoryRepository;
 import com.vetrifresh.repository.ProductRepository;
+import com.vetrifresh.repository.UserRepository;
 import com.vetrifresh.service.ProductService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -29,6 +32,8 @@ public class AdminController {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+
     private final ProductService productService;
 
     private final BlogRepository blogRepository;
@@ -147,11 +152,21 @@ public class AdminController {
 
     // ─── Delete Category ──────────────────────────────────
     @PostMapping("/categories/delete/{id}")
-    public String deleteCategory(@PathVariable Long id) {
-        categoryRepository.deleteById(id);
-        return "redirect:/admin/categories";
-    }
+    @Transactional
+public String deleteCategory(@PathVariable Long id,
+                             RedirectAttributes redirectAttributes) {
 
+    // 1️⃣ Delete all products under this category
+    productRepository.deleteByCategoryId(id);
+
+    // 2️⃣ Delete the category
+    categoryRepository.deleteById(id);
+
+    redirectAttributes.addFlashAttribute("success",
+            " Category and all its products deleted successfully.");
+
+    return "redirect:/admin/categories";
+}
 
 // ─── Blog List ────────────────────────────────────
 @GetMapping("/blogs")
@@ -194,5 +209,11 @@ public String deleteBlog(@PathVariable Long id) {
     blogRepository.deleteById(id);
     return "redirect:/admin/blogs";
 }  
+
+@ModelAttribute("currentUser")
+public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    if (userDetails == null) return null;
+    return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+}
 
 }

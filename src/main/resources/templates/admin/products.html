@@ -13,10 +13,10 @@
   <aside class="admin-sidebar">
     <div class="admin-logo">🌿 VetriFresh</div>
      <nav>
-      <a th:href="@{/admin/dashboard}" class="active"><i class="fas fa-home"></i> Dashboard</a>
-      <a th:href="@{/admin/products}"><i class="fas fa-box"></i> Products</a>
+      <a th:href="@{/admin/dashboard}" ><i class="fas fa-home"></i> Dashboard</a>
+      <a th:href="@{/admin/products}" class="active"><i class="fas fa-box"></i> Products</a>
       <a th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categories</a>
-      <a th:href="@{/admin/orders}" class="active"><i class="fas fa-bag-shopping"></i> Orders</a>
+      <a th:href="@{/admin/orders}"><i class="fas fa-bag-shopping"></i> Orders</a>
       <a th:href="@{/admin/blogs}">  <i class="fas fa-newspaper"></i> Blogs</a>
       <a th:href="@{/home}">  <i class="fas fa-eye"></i> View Site</a>
       <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -68,7 +68,7 @@
               </a>
               <form th:action="@{/admin/products/delete/{id}(id=${p.id})}" method="post"
                     onsubmit="return confirm('Delete this product?')">
-                <button type="submit" class="btn-delete">
+                <button title="del-btn" type="submit" class="btn-delete">
                   <i class="fas fa-trash"></i>
                 </button>
               </form>

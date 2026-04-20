@@ -5,8 +5,8 @@ import lombok.*;
 import java.util.List;
 @Entity
 @Table(name = "categories")
-@Getter          // ← use @Getter + @Setter instead of @Data
-@Setter          //   to avoid proxy issues
+@Getter          
+@Setter          
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

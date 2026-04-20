@@ -1,19 +1,29 @@
 package com.vetrifresh.controller;
 
+import java.util.stream.Collectors;
+
 import com.vetrifresh.model.Product;
+import com.vetrifresh.model.User;
 import com.vetrifresh.repository.CategoryRepository;
 import com.vetrifresh.repository.ProductRepository;
+import com.vetrifresh.repository.UserRepository;
+
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import java.util.stream.Stream;
 
 @Controller
@@ -22,6 +32,7 @@ public class ShopController {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @GetMapping("/shop")
 public String shop(
@@ -121,6 +132,12 @@ public String shop(
     return "shop";
 }
 
+
+@ModelAttribute("currentUser")
+public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    if (userDetails == null) return null;
+    return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+}
 
 
 }

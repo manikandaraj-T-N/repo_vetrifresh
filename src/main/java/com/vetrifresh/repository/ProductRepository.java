@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.vetrifresh.model.Category;
-
 import com.vetrifresh.model.Product;
 
 @Repository
@@ -36,6 +35,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     List<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndIsActiveTrue(
             String name, String description);
+
+
+    List<Product> findByCategoryId(Long categoryId);
+
+    void deleteByCategoryId(Long categoryId);
 
     @Query("SELECT p FROM Product p WHERE " +
            "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")

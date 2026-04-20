@@ -1,6 +1,5 @@
 package com.vetrifresh.controller;
 
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -231,4 +230,9 @@ public String privacy() { return "privacy"; }
 // }
 
 
+@ModelAttribute("currentUser")
+public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    if (userDetails == null) return null;
+    return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+}
 }

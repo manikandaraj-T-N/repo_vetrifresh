@@ -7,13 +7,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.vetrifresh.repository.UserRepository;
+
+
 import com.vetrifresh.model.CartItem;
+import com.vetrifresh.model.User;
 import com.vetrifresh.service.CartService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class CartController {
 
     private final CartService cartService;
+        private final UserRepository userRepository;
 
     @GetMapping
     public String viewCart(
@@ -118,4 +124,10 @@ public String addToCart(
 
         return "redirect:/cart";
     }
+
+    @ModelAttribute("currentUser")
+public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    if (userDetails == null) return null;
+    return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+}
 }

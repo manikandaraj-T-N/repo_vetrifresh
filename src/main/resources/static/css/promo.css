@@ -1,0 +1,145 @@
+.promo-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 16px;
+  background: #e8f5e0;
+  border-radius: 16px;
+}
+
+.promo-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 450px;
+  cursor: pointer;
+
+}
+.shop-btn:hover {
+  background: green;
+  color: white;
+  
+}
+
+.card-3 { background: #f5c800; }
+
+.card-img-bottom {
+  width: 100%; 
+  object-fit: cover;
+  object-position: top;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 32px 28px;
+}
+
+
+
+.tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  text-align:center
+}
+.card-3 .tag { color: white;
+text-align: center; }
+
+.title {
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.card-3 .title { color: white; }
+
+.subtitle { font-size: 15px; color: rgba(255,255,255,0.85); margin-bottom: 10px; }
+.price { font-size: 22px; font-weight: 800; color: #f5a623; }
+
+.off-badge {
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+.up-to { font-size: 15px; font-weight: 700; color: white; }
+
+.shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: #1a7a34;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 13px 28px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 16px;
+  transition: background 0.3s, color 0.3s;
+}
+.card-1 {
+    border-radius: 10px;
+}
+.card-1 img{
+    transform: rotate(-90deg);
+}
+
+/* Countdown */
+.countdown { display: flex; gap: 12px; margin-bottom: 22px; }
+.cd-box { text-align: center; }
+.cd-num { font-size: 36px; font-weight: 900; color: #fff; line-height: 1; }
+.cd-label { font-size: 10px; color: rgba(255,255,255,0.6); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+.cd-sep { font-size: 32px; font-weight: 900; color: #fff; padding-top: 2px; }
+
+/* Animations */
+@keyframes fromLeft   { from { opacity:0; transform: translateX(-60px); } to { opacity:1; transform: translateX(0); } }
+@keyframes fromRight  { from { opacity:0; transform: translateX(60px);  } to { opacity:1; transform: translateX(0); } }
+@keyframes fromBottom { from { opacity:0; transform: translateY(60px);  } to { opacity:1; transform: translateY(0); } }
+
+
+/* ✅ Add this — animations paused until JS triggers them */
+.card-1 .anim {
+  animation: fromLeft   0.7s cubic-bezier(.25,.8,.25,1) both paused;
+}
+.card-2 .anim {
+  animation: fromBottom 0.7s cubic-bezier(.25,.8,.25,1) both paused;
+}
+.card-3 .anim {
+  animation: fromRight  0.7s cubic-bezier(.25,.8,.25,1) both paused;
+}
+
+.card-1 .anim:nth-child(1) { animation-delay: 0.00s; }
+.card-1 .anim:nth-child(2) { animation-delay: 0.15s; }
+.card-1 .anim:nth-child(3) { animation-delay: 0.30s; }
+.card-1 .anim:nth-child(4) { animation-delay: 0.45s; }
+
+.card-2 .anim:nth-child(1) { animation-delay: 0.10s; }
+.card-2 .anim:nth-child(2) { animation-delay: 0.25s; }
+.card-2 .anim:nth-child(3) { animation-delay: 0.40s; }
+.card-2 .anim:nth-child(4) { animation-delay: 0.55s; }
+
+.card-3 .anim:nth-child(1) { animation-delay: 0.00s; }
+.card-3 .anim:nth-child(2) { animation-delay: 0.15s; }
+.card-3 .anim:nth-child(3) { animation-delay: 0.30s; }
+.card-3 .anim:nth-child(4) { animation-delay: 0.45s; }
+
+@media (max-width: 768px) {
+  .promo-section { grid-template-columns: 1fr; }
+  .promo-card { height: 380px; }
+}

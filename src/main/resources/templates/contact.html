@@ -56,18 +56,77 @@
 </a>
 
 
-      <!-- Show login/logout based on authentication -->
-     <div sec:authorize="isAuthenticated()">
-    <span sec:authentication="name">User</span>
-    <a th:href="@{/logout}">
-        <button class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+   <div class="user-menu-wrap">
+
+  <!-- LOGGED IN -->
+  <div sec:authorize="isAuthenticated()" class="user-menu">
+    <button class="avatar-btn" onclick="toggleUserMenu(event)" title="Account menu">
+      <img th:src="${currentUser?.profileImage != null ? currentUser.profileImage : '/images/profiles/default-avatar.jpg'}"
+           onerror="this.src='/images/profiles/default-avatar.jpg'"
+           class="avatar-img" alt="Profile"/>
+      <span class="avatar-online-dot"></span>
+    </button>
+
+    <div class="user-dropdown" id="userDropdown">
+      <!-- User info header -->
+      <div class="dropdown-header">
+        <img th:src="${currentUser?.profileImage != null ? currentUser.profileImage : '/images/profiles/default-avatar.jpg'}"
+             onerror="this.src='/images/profiles/default-avatar.jpg'"
+             class="dropdown-avatar" alt="Profile"/>
+        <div class="dropdown-user-info">
+          <span class="dropdown-name" sec:authentication="name">User</span>
+          <span class="dropdown-role">Member</span>
+        </div>
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <a th:href="@{/profile}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-user-circle"></i></span>
+        <span>My Profile</span>
+      </a>
+      <a th:href="@{/orders}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-box-open"></i></span>
+        <span>My Orders</span>
+      </a>
+      <a th:href="@{/wishlist}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-heart"></i></span>
+        <span>Wishlist</span>
+      </a>
+      <a th:href="@{/cart}" class="dropdown-item">
+        <span class="di-icon"><i class="fas fa-shopping-cart"></i></span>
+        <span>My Cart</span>
+      </a>
+
+      <!-- Admin link — only visible to ADMIN role -->
+      <div sec:authorize="hasRole('ADMIN')">
+        <div class="dropdown-divider"></div>
+        <a th:href="@{/admin/dashboard}" class="dropdown-item dropdown-item-admin">
+          <span class="di-icon"><i class="fas fa-shield-alt"></i></span>
+          <span>Admin Panel</span>
+        </a>
+
+      </div>
+
+      <div class="dropdown-divider"></div>
+
+      <a th:href="@{/logout}" class="dropdown-item dropdown-item-logout">
+        <span class="di-icon"><i class="fas fa-sign-out-alt"></i></span>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- NOT LOGGED IN -->
+  <div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}" class="login-pill">
+      <i class="fas fa-user"></i>
+      <span>Login</span>
     </a>
+  </div>
+
 </div>
-<div sec:authorize="!isAuthenticated()">
-    <a th:href="@{/login}">
-        <button class="icon-btn" title="Account">👤</button>
-    </a>
-</div>
+
     </div>
   </div>
     </header>
@@ -186,6 +245,31 @@
 <!-- ==================footer==================================== -->
 
 <th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+
+<script>
+
+function toggleUserMenu(e) {
+  e.stopPropagation();
+  document.getElementById('userDropdown').classList.toggle('open');
+}
+
+// Close on outside click
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('userDropdown');
+  if (dropdown && !e.target.closest('.user-menu')) {
+    dropdown.classList.remove('open');
+  }
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.remove('open');
+  }
+});
+</script>
 
 </body>
 </html>

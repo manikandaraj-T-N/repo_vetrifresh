@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -57,4 +58,10 @@ public class OrderController {
         model.addAttribute("order", order);
         return "order-detail";   // → templates/order-detail.html
     }
+
+    @ModelAttribute("currentUser")
+public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    if (userDetails == null) return null;
+    return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+}
 }
