@@ -45,4 +45,9 @@ MODIFY COLUMN role ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER';
 
 SELECT email, role FROM users;
 
+
+SELECT id, name, price, original_price FROM products;
+-- Check if original_price is actually saved
+SELECT id, name, price, original_price FROM products WHERE original_price IS NOT NULL;
+
 $2a$12$jFNxXMH.WHiLLLMPFXb6V.Rjij60XiftG1J4sp6vGBFWpZ9CTjIla
