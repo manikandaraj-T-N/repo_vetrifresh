@@ -53,21 +53,8 @@
         </button>
       </a>
 
-      <!-- <div sec:authorize="isAuthenticated()">
-        <span sec:authentication="name">User</span>
-        <a th:href="@{/logout}">
-          <button class="icon-btn" title="Logout">
-            <i class="fas fa-sign-out-alt"></i>
-          </button>
-        </a>
-      </div>
-      <div sec:authorize="!isAuthenticated()">
-        <a th:href="@{/login}">
-          <button class="icon-btn" title="Account">👤</button>
-        </a>
-      </div> -->
-
-             <div class="user-menu-wrap">
+   
+  <div class="user-menu-wrap">
 
   <!-- LOGGED IN -->
   <div sec:authorize="isAuthenticated()" class="user-menu">
@@ -160,87 +147,146 @@
   <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar">
 
-    <!-- Category Filter -->
-    <div class="filter-block">
-      <div class="filter-title" onclick="toggleFilter('catFilter')">
-        All Categories <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="filter-body" id="catFilter">
-        <ul class="cat-list">
-          <li class="active"><a href="/blog">All Posts</a></li>
-          <li><a href="/blog?category=Food">Food</a></li>
-          <li><a href="/blog?category=Organic Living">Organic Living</a></li>
-          <li><a href="/blog?category=Recipes">Recipes</a></li>
-          <li><a href="/blog?category=Health">Health</a></li>
-          <li><a href="/blog?category=Nutrition">Nutrition</a></li>
-        </ul>
+  <!-- Category Filter -->
+  <div class="filter-block">
+    <div class="filter-title" onclick="toggleFilter('catFilter')">
+      All Categories <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="filter-body open" id="catFilter">
+      <ul class="cat-list">
+        <li class="active"><a href="/blog" onclick="event.stopPropagation()">All Posts</a></li>
+        <li><a href="/blog?category=Food"           onclick="event.stopPropagation()">Food</a></li>
+        <li><a href="/blog?category=Organic Living" onclick="event.stopPropagation()">Organic Living</a></li>
+        <li><a href="/blog?category=Recipes"        onclick="event.stopPropagation()">Recipes</a></li>
+        <li><a href="/blog?category=Health"         onclick="event.stopPropagation()">Health</a></li>
+        <li><a href="/blog?category=Nutrition"      onclick="event.stopPropagation()">Nutrition</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Popular Tags — always open, no toggle -->
+  <div class="filter-block">
+    <div class="filter-title">Popular Tags</div>
+    <div class="filter-body open" id="tagsFilter">
+      <div class="tags-wrap">
+        <span th:each="t : ${allTags}"
+              th:text="${t}"
+              th:classappend="${t == activeTag} ? ' active' : ''"
+              th:attr="data-tag=${t}"
+              onclick="filterTag(this.dataset.tag)"
+              class="tag">
+        </span>
+        <!-- Fallback if no tags from DB -->
+        <th:block th:if="${allTags == null or allTags.isEmpty()}">
+          <span class="tag" onclick="filterTag('organic')">Organic</span>
+          <span class="tag" onclick="filterTag('fresh')">Fresh</span>
+          <span class="tag" onclick="filterTag('healthy')">Healthy</span>
+          <span class="tag" onclick="filterTag('vegan')">Vegan</span>
+          <span class="tag" onclick="filterTag('recipes')">Recipes</span>
+          <span class="tag" onclick="filterTag('seasonal')">Seasonal</span>
+        </th:block>
       </div>
     </div>
+  </div>
 
-    <!-- Price Filter (repurposed as Date/Sort for blog) -->
-    <div class="filter-block">
-      <div class="filter-title" onclick="toggleFilter('priceFilter')">
-        Price <i class="fas fa-chevron-down"></i>
-      </div>
+<!-- sales products -->
+<div class="filter-block">
+  <div class="filter-title">Sale Products</div>
+  <div class="filter-body open">
+    <div class="sale-products-list">
 
-      <!-- <div class="filter-body" id="priceFilter">
-        <div class="price-range">
-          <input type="range" id="maxPrice" min="0" max="2000" value="2000"
-                 oninput="updatePrice(this.value)"/>
-          <div class="price-labels">
-            <span>₹0</span>
-            <span id="priceDisplay">₹2000</span>
-          </div>
-          <button class="apply-btn">Apply</button>
+      <a th:each="p : ${saleProducts}"
+         th:href="@{/product/{id}(id=${p.id})}"
+         class="sale-product-item">
+        <div class="sale-product-img">
+          <img th:src="${p.imageUrl}"
+               th:alt="${p.name}"
+               onerror="this.src='/images/placeholder.jpg'"/>
         </div>
-      </div> -->
+        <div class="sale-product-info">
+          <div class="sale-product-name" th:text="${p.name}">Product</div>
+          <div class="sale-product-prices">
+            <span class="sale-price" th:text="'₹' + ${p.price}">₹0</span>
+            <span class="sale-original"
+                  th:if="${p.originalPrice != null}"
+                  th:text="'₹' + ${p.originalPrice}">₹0</span>
+          </div>
+          <div class="sale-stars">
+            <th:block th:if="${p.rating != null}">
+              <i th:each="s : ${#numbers.sequence(1,5)}"
+                 th:class="${s <= p.rating.intValue()} ? 'fas fa-star' : 'far fa-star'"></i>
+            </th:block>
+            <th:block th:unless="${p.rating != null}">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </th:block>
+          </div>
+        </div>
+      </a>
+
+      <p th:if="${saleProducts == null or saleProducts.isEmpty()}"
+         style="font-size:13px;color:#888;">No sale products right now.</p>
 
     </div>
-
-    <!-- Rating Filter -->
-    <div class="filter-block">
-      <div class="filter-title" onclick="toggleFilter('ratingFilter')">
-        Rating <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="filter-body" id="ratingFilter">
-        <label class="rating-option" th:each="r : ${#numbers.sequence(5,1,-1)}">
-          <input type="radio" name="rating" th:value="${r}"/>
-          <span th:each="s : ${#numbers.sequence(1,5)}">
-            <i th:class="${s <= r} ? 'fas fa-star' : 'far fa-star'"></i>
-          </span>
-          <span th:text="${r} + (${r} < 5 ? ' &amp; up' : '')"></span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Popular Tags -->
-    <div class="filter-block">
-      <div class="filter-title">Popular Tag</div>
-      <div class="filter-body">
-        
-    <div class="tags-wrap">
-  <span th:each="t : ${allTags}"
-        th:text="${t}"
-        th:classappend="${t == activeTag} ? ' active' : ''"
-        th:attr="data-tag=${t}"
-        onclick="filterTag(this.dataset.tag)"
-        class="tag">
-  </span>
+  </div>
 </div>
 
+  <!-- Recently Added (Blog Posts) — like screenshot -->
+  <div class="filter-block">
+    <div class="filter-title">Recently Added</div>
+    <div class="filter-body open" id="recentFilter">
+      <div class="recent-posts-list">
+        <a th:each="post : ${recentPosts}"
+           th:href="@{/blog/{id}(id=${post.id})}"
+           class="recent-post-item">
+          <div class="recent-post-img">
+            <img th:src="${post.imageUrl}"
+                 th:alt="${post.title}"
+                 onerror="this.src='/images/placeholder.jpg'"/>
+          </div>
+          <div class="recent-post-info">
+            <div class="recent-post-title" th:text="${post.title}">Post Title</div>
+            <div class="recent-post-date">
+              <i class="far fa-calendar-alt"></i>
+              <span th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}">Date</span>
+            </div>
+          </div>
+        </a>
+
+        <p th:if="${recentPosts == null or recentPosts.isEmpty()}"
+           style="font-size:13px;color:#888;">No recent posts.</p>
       </div>
     </div>
+  </div>
 
-    <!-- Discount Banner -->
-    <div class="filter-block blog-discount-banner">
-      <div class="discount-percent">79% <span>Discount</span></div>
-      <p>on your first order</p>
-      <a th:href="@{/shop}" class="discount-shop-btn">
-        Shop Now <i class="fas fa-arrow-right"></i>
-      </a>
+  <!-- Our Gallery — like screenshot -->
+  <div class="filter-block">
+    <div class="filter-title">Our Gallery</div>
+    <div class="filter-body open" id="galleryFilter">
+      <div class="gallery-grid">
+        <img src="/images/vegetables.jpg"   alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/vegetables1.png"  alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/bag.jpg"          alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/snacks.jpg"       alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/beverages.jpg"    alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/cooking.jpg"      alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/meat.jpg"         alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+        <img src="/images/baking.jpg"       alt="Gallery" class="gallery-img" onerror="this.src='/images/placeholder.jpg'"/>
+      </div>
     </div>
+  </div>
 
-  </aside>
+  <!-- Discount Banner -->
+  <div class="filter-block blog-discount-banner">
+    <div class="discount-percent">79% <span>Discount</span></div>
+    <p>on your first order</p>
+    <a th:href="@{/shop}" class="discount-shop-btn">
+      Shop Now <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+</aside>
 
   <!-- ===== BLOG MAIN ===== -->
   <main class="blog-main">
@@ -252,10 +298,12 @@
       </div>
       <div class="sort-right">
         <label>Sort by:</label>
-        <select title="sort" onchange="window.location.href='/blog?sort='+this.value">
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
-        </select>
+
+     <select title="sort" onchange="applySort(this.value)">
+  <option value="latest" th:selected="${sort == 'latest'}">Latest</option>
+  <option value="oldest" th:selected="${sort == 'oldest'}">Oldest</option>
+    </select>
+
       </div>
     </div>
 
@@ -402,7 +450,7 @@
 
 <th:block th:insert="~{fragments/footer :: footer}"></th:block>
 
-<script th:src="@{/js/shop.js}"></script>
+<script th:src="@{/js/blog.js}"></script>
 
 <script>
 

@@ -1,6 +1,8 @@
 package com.vetrifresh.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -147,11 +149,19 @@ public String AboutPage() {
 public String blogPage(
         @RequestParam(required = false) String category,
         @RequestParam(required = false) String tag,
+        @RequestParam(required = false, defaultValue = "latest") String sort,
         Model model) {
 
-    List<Blog> blogs = blogRepository.findByIsPublishedTrueOrderByCreatedAtDesc();
+            System.out.println(">>> SORT PARAM: " + sort);
 
-    // Static default tags (always shown)
+    // List<Blog> blogs = blogRepository.findByIsPublishedTrueOrderByCreatedAtDesc();
+
+    List<Blog> blogs = new ArrayList<>(  // ← wrap in ArrayList
+        blogRepository.findByIsPublishedTrueOrderByCreatedAtDesc()
+    );
+    
+
+    // Static default tags
     List<String> staticTags = Arrays.asList(
         "Healthy", "Low fat", "Vegetarian", "Kid foods",
         "Vitamins", "Bread", "Meat", "Snacks",
@@ -166,19 +176,21 @@ public String blogPage(
         .filter(t -> !t.isEmpty())
         .collect(Collectors.toList());
 
-    // Merge both — no duplicates, sorted
+    // Merge both
     List<String> allTags = Stream.concat(staticTags.stream(), dbTags.stream())
         .map(String::trim)
         .distinct()
         .sorted()
         .collect(Collectors.toList());
 
-    // Apply filters
+    // Apply category filter
     if (category != null && !category.isBlank()) {
         blogs = blogs.stream()
             .filter(b -> category.equalsIgnoreCase(b.getCategory()))
             .collect(Collectors.toList());
     }
+
+    // Apply tag filter
     if (tag != null && !tag.isBlank()) {
         blogs = blogs.stream()
             .filter(b -> b.getTags() != null &&
@@ -188,11 +200,32 @@ public String blogPage(
             .collect(Collectors.toList());
     }
 
+    // ✅ Apply sort BEFORE adding to model
+    if ("oldest".equals(sort)) {
+        blogs = blogs.stream()
+            .sorted(Comparator.comparing(Blog::getCreatedAt))
+            .collect(Collectors.toList());
+    }
+    // "latest" already sorted by repository
+
+    // ✅ Now add to model after all processing is done
     model.addAttribute("blogs", blogs);
     model.addAttribute("allTags", allTags);
     model.addAttribute("activeTag", tag);
+    model.addAttribute("activeCategory", category);
+    model.addAttribute("sort", sort);
+    model.addAttribute("recentPosts",
+        blogRepository.findByIsPublishedTrueOrderByCreatedAtDesc()
+            .stream().limit(5).collect(Collectors.toList()));
+    model.addAttribute("saleProducts",
+        productRepository.findAll().stream()
+            .filter(p -> p.getOriginalPrice() != null)
+            .limit(3)
+            .collect(Collectors.toList()));
+
     return "blog";
 }
+
 
 
 @GetMapping("/blog/{id}")

@@ -7,10 +7,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.vetrifresh.model.Product;
+import com.vetrifresh.model.User;
 import com.vetrifresh.repository.ProductRepository;
+import com.vetrifresh.repository.UserRepository;
 import com.vetrifresh.service.CartService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor  
 public class ProductDetailController {
      private final ProductRepository productRepository;
+     private final UserRepository userRepository;
     private final CartService cartService;
 
     @GetMapping("/product/{id}")
@@ -41,4 +45,11 @@ public class ProductDetailController {
 
         return "product-detail";
 }
+
+@ModelAttribute("currentUser")
+public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    if (userDetails == null) return null;
+    return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+}
+
 }

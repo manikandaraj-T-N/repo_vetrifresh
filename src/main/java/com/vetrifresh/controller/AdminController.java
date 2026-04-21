@@ -216,4 +216,6 @@ public User currentUser(@AuthenticationPrincipal UserDetails userDetails) {
     return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
 }
 
+
+
 }

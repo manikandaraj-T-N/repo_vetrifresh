@@ -136,98 +136,101 @@
 <div class="shop-wrapper">
 
   <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar">
+ <aside class="sidebar">
 
-    <!-- Category Filter -->
-    <div class="filter-block">
-      <div class="filter-title" onclick="toggleFilter('catFilter')">
-        All Categories <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="filter-body" id="catFilter">
-        <ul class="cat-list">
-          <li th:classappend="${selectedCategory == null or selectedCategory == 'all'} ? ' active' : ''">
-            <a href="/shop">All Products</a>
-          </li>
-          <li th:each="cat : ${categories}"
-              th:classappend="${selectedCategory == cat.slug} ? ' active' : ''">
-            <a th:href="@{/shop(category=${cat.slug})}" th:text="${cat.name}">Category</a>
-          </li>
-          <!-- Static fallback -->
-          <th:block th:if="${categories == null or categories.isEmpty()}">
-            <li><a href="/shop?category=fresh-fruit">Fresh Fruit</a></li>
-            <li><a href="/shop?category=fresh-vegetables">Fresh Vegetables</a></li>
-            <li><a href="/shop?category=meat-fish">Meat &amp; Fish</a></li>
-            <li><a href="/shop?category=snacks">Snacks</a></li>
-            <li><a href="/shop?category=beverages">Beverages</a></li>
-            <li><a href="/shop?category=beauty-health">Beauty &amp; Health</a></li>
-             <li><a href="/shop?category=beverages">Bread &amp; Bakery</a></li>
-              <li><a href="/shop?category=beverages">Baking Needs</a></li>
-                <li><a href="/shop?category=beverages">Cooking</a></li>
-                <li><a href="/shop?category=beverages">Diabetic Food</a></li>
-                <li><a href="/shop?category=beverages">Dish Detergent</a></li>
-                 <li><a href="/shop?category=beverages"> Oil</a></li>   
-
-          </th:block>
-        </ul>
-      </div>
+  <!-- Category Filter -->
+  <div class="filter-block">
+    <div class="filter-title" onclick="toggleFilter('catFilter')">
+      All Categories <i class="fas fa-chevron-up"></i>
     </div>
+    <div class="filter-body open" id="catFilter">
+      <ul class="cat-list">
+        <li th:classappend="${selectedCategory == null or selectedCategory == 'all'} ? ' active' : ''">
+          <!-- stopPropagation prevents the click from bubbling to filter-title -->
+          <a href="/shop" onclick="event.stopPropagation()">All Products</a>
+        </li>
+        <li th:each="cat : ${categories}"
+            th:classappend="${selectedCategory == cat.slug} ? ' active' : ''">
+          <a th:href="@{/shop(category=${cat.slug})}"
+             th:text="${cat.name}"
+             onclick="event.stopPropagation()">Category</a>
+        </li>
+        <th:block th:if="${categories == null or categories.isEmpty()}">
+          <li><a href="/shop?category=fresh-fruit"      onclick="event.stopPropagation()">Fresh Fruit</a></li>
+          <li><a href="/shop?category=fresh-vegetables" onclick="event.stopPropagation()">Fresh Vegetables</a></li>
+          <li><a href="/shop?category=meat-fish"        onclick="event.stopPropagation()">Meat &amp; Fish</a></li>
+          <li><a href="/shop?category=snacks"           onclick="event.stopPropagation()">Snacks</a></li>
+          <li><a href="/shop?category=beverages"        onclick="event.stopPropagation()">Beverages</a></li>
+          <li><a href="/shop?category=beauty-health"    onclick="event.stopPropagation()">Beauty &amp; Health</a></li>
+          <li><a href="/shop?category=bread-bakery"     onclick="event.stopPropagation()">Bread &amp; Bakery</a></li>
+          <li><a href="/shop?category=baking-needs"     onclick="event.stopPropagation()">Baking Needs</a></li>
+          <li><a href="/shop?category=cooking"          onclick="event.stopPropagation()">Cooking</a></li>
+          <li><a href="/shop?category=diabetic-food"    onclick="event.stopPropagation()">Diabetic Food</a></li>
+          <li><a href="/shop?category=dish-detergents"  onclick="event.stopPropagation()">Dish Detergent</a></li>
+          <li><a href="/shop?category=oil"              onclick="event.stopPropagation()">Oil</a></li>
+        </th:block>
+      </ul>
+    </div>
+  </div>
 
-    <!-- Price Filter -->
-    <div class="filter-block">
-      <div class="filter-title" onclick="toggleFilter('priceFilter')">
-        Price <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="filter-body" id="priceFilter">
-        <div class="price-range">
-          <input type="range" id="maxPrice" min="0" max="2000"
-                 th:value="${maxPrice} ?: 2000"
-                 oninput="updatePrice(this.value)"/>
-          <div class="price-labels">
-            <span>₹0</span>
-            <span id="priceDisplay"
-                  th:text="'₹' + (${maxPrice} ?: 2000)">₹2000</span>
-          </div>
-          <button class="apply-btn" onclick="applyPriceFilter()">Apply</button>
+  <!-- Price Filter -->
+  <div class="filter-block">
+    <div class="filter-title" onclick="toggleFilter('priceFilter')">
+      Price <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="filter-body open" id="priceFilter">
+      <div class="price-range">
+        <input type="range" id="maxPrice" min="0" max="2000"
+               th:value="${maxPrice} ?: 2000"
+               oninput="updatePrice(this.value)"/>
+        <div class="price-labels">
+          <span>₹0</span>
+          <span id="priceDisplay"
+                th:text="'₹' + (${maxPrice} ?: 2000)">₹2000</span>
         </div>
+        <button class="apply-btn" onclick="applyPriceFilter()">Apply</button>
       </div>
     </div>
+  </div>
 
-    <!-- Rating Filter -->
-    <div class="filter-block">
-      <div class="filter-title" onclick="toggleFilter('ratingFilter')">
-        Rating <i class="fas fa-chevron-down"></i>
-      </div>
-      <div class="filter-body" id="ratingFilter">
-        <label class="rating-option" th:each="r : ${#numbers.sequence(5,1,-1)}">
-          <input type="radio" name="rating"
-                 th:value="${r}"
-                 th:checked="${selectedRating == r}"
-                 onchange="applyRatingFilter(this.value)"/>
-          <span th:each="s : ${#numbers.sequence(1,5)}">
-            <i th:class="${s <= r} ? 'fas fa-star' : 'far fa-star'"></i>
-          </span>
-          <span th:text="${r} + (${r} < 5 ? ' &amp; up' : '')"></span>
-        </label>
+  <!-- Rating Filter -->
+  <div class="filter-block">
+    <div class="filter-title" onclick="toggleFilter('ratingFilter')">
+      Rating <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="filter-body open" id="ratingFilter">
+      <label class="rating-option" th:each="r : ${#numbers.sequence(5,1,-1)}">
+        <input type="radio" name="rating"
+               th:value="${r}"
+               th:checked="${selectedRating == r}"
+               onchange="applyRatingFilter(this.value)"/>
+        <span th:each="s : ${#numbers.sequence(1,5)}">
+          <i th:class="${s <= r} ? 'fas fa-star' : 'far fa-star'"></i>
+        </span>
+        <span th:text="${r} + (${r} < 5 ? ' &amp; up' : '')"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Popular Tags — no toggle, always visible -->
+  <div class="filter-block">
+    <div class="filter-title">
+      Popular Tags
+    </div>
+    <div class="filter-body open" id="tagsFilter">
+      <div class="tags-wrap">
+        <span th:each="t : ${allTags}"
+              th:text="${t}"
+              th:classappend="${t == activeTag} ? ' active' : ''"
+              th:attr="data-tag=${t}"
+              onclick="filterTag(this.dataset.tag)"
+              class="tag">
+        </span>
       </div>
     </div>
+  </div>
 
-    <!-- Popular Tags -->
-    <div class="filter-block">
-      <div class="filter-title">Popular Tag</div>
-      <div class="filter-body">
-<div class="tags-wrap">
-  <span th:each="t : ${allTags}"
-        th:text="${t}"
-        th:classappend="${t == activeTag} ? ' active' : ''"
-        th:attr="data-tag=${t}"
-        onclick="filterTag(this.dataset.tag)"
-        class="tag">
-  </span>
-</div>
-      </div>
-    </div>
-
-  </aside>
+</aside>
 
   <!-- ===== MAIN CONTENT ===== -->
   <main class="shop-main">
@@ -258,7 +261,7 @@
   <!-- Image Area -->
   <div class="product-img-wrapper">
     <a th:href="@{/product/{id}(id=${product.id})}">
-      <img th:src="${product.imageUrl}"
+      <img alt="product image" th:src="${product.imageUrl}"
            th:alt="${product.name}"
            class="product-img"/>
     </a>
@@ -346,7 +349,6 @@
 <th:block th:insert="~{fragments/footer :: footer}"></th:block>
 
 <script th:src="@{/js/shop.js}"></script>
-
 
 
 <script>

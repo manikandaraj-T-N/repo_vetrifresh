@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vetrifresh.model.Product;
+import com.vetrifresh.model.User;
+import com.vetrifresh.repository.UserRepository;
 import com.vetrifresh.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
     private final ProductService productService;
+    // private final UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -84,4 +90,8 @@ public class ProductController {
     public ResponseEntity<List<Product>> getLowStock(@RequestParam(defaultValue = "10") int threshold) {
         return ResponseEntity.ok(productService.getLowStockProducts(threshold));
     }
+   
+   
 }
+
+

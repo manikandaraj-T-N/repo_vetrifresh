@@ -41,6 +41,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     void deleteByCategoryId(Long categoryId);
 
+   
+List<Product> findByOriginalPriceIsNotNull();
+
     @Query("SELECT p FROM Product p WHERE " +
            "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Product> searchProducts(@Param("keyword") String keyword);
